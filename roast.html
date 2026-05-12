@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RoastMine — Website Roast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --black:#090909;--charcoal:#111;--panel:#141414;--border:#222;--border2:#2e2e2e;
+  --grey:#444;--muted:#666;--light:#999;--cream:#e8e3da;--white:#f4f0e8;
+  --red:#bf2c1f;--red2:#e03423;--orange:#d9822b;--green:#4caf6e;
+  --font-d:'DM Serif Display',serif;--font-m:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:var(--black);color:var(--cream);font-family:var(--font-m);font-size:14px;line-height:1.6;overflow-x:hidden;cursor:crosshair;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,0.015) 48px,rgba(255,255,255,0.015) 49px),radial-gradient(circle at 85% 15%,rgba(191,44,31,.14),transparent 34%),radial-gradient(circle at 10% 90%,rgba(255,255,255,.045),transparent 28%);pointer-events:none;z-index:-1;}
+::selection{background:var(--red);color:#fff;}
+a{color:inherit;text-decoration:none;}
+button{cursor:crosshair;font-family:var(--font-m);}
+nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;border-bottom:1px solid var(--border);background:rgba(9,9,9,.96);backdrop-filter:blur(12px);}
+.logo{font-family:var(--font-d);font-size:20px;color:var(--white);display:flex;align-items:center;gap:8px;}
+.logo-flame{color:var(--red);font-style:italic;}
+.nav-link{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .15s;}
+.nav-link:hover{color:var(--white);}
+main{width:min(1180px,calc(100% - 96px));margin:0 auto;padding:72px 0 92px;}
+.loading{min-height:calc(100vh - 72px);display:grid;place-items:center;text-align:center;}
+.loading-card{width:min(620px,100%);border:1px solid var(--border);background:rgba(17,17,17,.78);padding:58px 42px;box-shadow:0 30px 120px rgba(0,0,0,.36);}
+.loader-mark{width:58px;height:58px;margin:0 auto 28px;border:1px solid var(--border2);display:grid;place-items:center;color:var(--red);font-family:var(--font-d);font-size:30px;animation:pulse 1.1s ease-in-out infinite;}
+.loading h1{font-family:var(--font-d);font-size:clamp(42px,7vw,76px);line-height:.95;color:var(--white);letter-spacing:-1px;margin-bottom:20px;}
+.loading p{color:var(--light);font-weight:300;}
+.dots::after{content:'';animation:dots 1.3s steps(4,end) infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);border-color:var(--border2);}50%{transform:scale(1.08);border-color:var(--red);box-shadow:0 0 42px rgba(191,44,31,.22);}}
+@keyframes dots{0%{content:'';}25%{content:'.';}50%{content:'..';}75%,100%{content:'...';}}
+.result{display:none;}
+.result.active{display:block;animation:up .55s ease both;}
+@keyframes up{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.result-header{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:end;margin-bottom:46px;}
+.kicker{font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:22px;}
+h1{font-family:var(--font-d);font-size:clamp(56px,9vw,116px);line-height:.9;letter-spacing:-2px;color:var(--white);}
+.analyzed-url{margin-top:22px;color:var(--muted);font-size:12px;word-break:break-all;}
+.analyzed-url span{color:var(--light);}
+.score-card{border:1px solid var(--border);background:rgba(17,17,17,.82);padding:34px;position:relative;overflow:hidden;}
+.score-card::after{content:'';position:absolute;right:-70px;top:-70px;width:190px;height:190px;border-radius:50%;background:var(--score-glow,rgba(191,44,31,.16));filter:blur(4px);}
+.score-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.score-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:26px;position:relative;z-index:1;}
+.score-number{font-family:var(--font-d);font-size:96px;line-height:.82;color:var(--score-color,var(--red));}
+.score-max{color:var(--grey);font-size:16px;margin-bottom:12px;}
+.score-verdict{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--score-color,var(--red));}
+.score-bar{height:5px;background:var(--border2);overflow:hidden;margin-top:10px;}
+.score-fill{height:100%;width:0;background:var(--score-color,var(--red));transition:width .9s ease .25s;}
+.roast-card{border:1px solid var(--border);background:rgba(255,255,255,.018);padding:42px 44px;margin-bottom:34px;}
+.card-title{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.roast-text{font-family:var(--font-d);font-size:clamp(28px,4vw,44px);line-height:1.13;color:var(--white);letter-spacing:-.5px;}
+.analysis-grid{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);margin-bottom:34px;}
+.analysis-block{padding:28px 24px;border-right:1px solid var(--border);background:rgba(17,17,17,.58);}
+.analysis-block:last-child{border-right:none;}
+.block-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:22px;}
+.block-name{font-family:var(--font-d);font-size:25px;color:var(--white);line-height:1;}
+.block-score{font-size:12px;color:var(--red);white-space:nowrap;}
+.block-comment{color:var(--light);font-size:12px;line-height:1.75;margin-bottom:18px;font-weight:300;}
+.final-hit-card{border:1px solid var(--border);background:rgba(191,44,31,.055);padding:34px;margin-bottom:34px;}
+.final-hit{font-family:var(--font-d);font-size:clamp(24px,3vw,34px);line-height:1.18;color:var(--white);}
+.bottom-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;}
+.suggestions,.share{border:1px solid var(--border);background:rgba(17,17,17,.72);padding:34px;}
+.action-list{list-style:none;display:grid;gap:16px;}
+.action-list li{display:grid;grid-template-columns:auto 1fr;gap:12px;color:var(--light);font-size:13px;line-height:1.7;}
+.action-list span{color:var(--red);}
+.share-copy{border:1px solid var(--border2);background:#0d0d0d;color:var(--white);padding:18px;margin-bottom:18px;font-size:13px;line-height:1.7;}
+.share-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{border:none;padding:14px 20px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:background .15s,color .15s,border-color .15s;}
+.btn-primary{background:var(--white);color:var(--black);}
+.btn-primary:hover{background:var(--red);color:#fff;}
+.btn-ghost{background:transparent;color:var(--cream);border:1px solid var(--border2);}
+.btn-ghost:hover{border-color:var(--red);color:var(--white);}
+.copy-status{display:none;margin-top:14px;color:var(--green);font-size:11px;}
+.empty-url{border:1px solid var(--border);background:rgba(17,17,17,.78);padding:44px;margin-top:34px;color:var(--light);}
+.empty-url a{color:var(--white);border-bottom:1px solid var(--red);}
+@media(max-width:980px){main{width:calc(100% - 40px);padding:48px 0 68px;}nav{padding:16px 20px;}.result-header,.bottom-grid{grid-template-columns:1fr;}.analysis-grid{grid-template-columns:1fr 1fr;}.analysis-block{border-bottom:1px solid var(--border);}.analysis-block:nth-child(2n){border-right:none;}}
+@media(max-width:620px){.analysis-grid{grid-template-columns:1fr;}.analysis-block{border-right:none;}.roast-card,.suggestions,.share,.score-card,.final-hit-card{padding:26px 22px;}h1{font-size:52px;}.score-number{font-size:82px;}.loading-card{padding:42px 24px;}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">RoastMine <span class="logo-flame">✶</span></a>
+  <a class="nav-link" href="index.html">New roast</a>
+</nav>
+
+<main>
+  <section class="loading" id="loadingScreen" aria-live="polite">
+    <div class="loading-card">
+      <div class="loader-mark">✶</div>
+      <h1>Website Roast</h1>
+      <p><span class="dots">Analyzing your website</span></p>
+    </div>
+  </section>
+
+  <section class="result" id="resultScreen">
+    <header class="result-header">
+      <div>
+        <div class="kicker">// Brutal conversion audit</div>
+        <h1>Website Roast</h1>
+        <p class="analyzed-url">Analyzed URL: <span id="displayUrl"></span></p>
+      </div>
+      <aside class="score-card" id="scoreCard">
+        <div class="score-label">Global score</div>
+        <div class="score-row">
+          <div class="score-number" id="globalScore">0</div>
+          <div class="score-max">/100</div>
+        </div>
+        <div class="score-verdict" id="scoreVerdict">Loading verdict</div>
+        <div class="score-bar"><div class="score-fill" id="scoreFill"></div></div>
+      </aside>
+    </header>
+
+    <section class="roast-card">
+      <div class="card-title">Main roast</div>
+      <p class="roast-text" id="mainRoast"></p>
+    </section>
+
+    <section class="analysis-grid" id="analysisGrid" aria-label="Website analysis breakdown"></section>
+
+    <section class="bottom-grid">
+      <div class="suggestions">
+        <div class="card-title">Top 3 fixes</div>
+        <ul class="action-list" id="actionList"></ul>
+      </div>
+      <div class="share">
+        <div class="card-title">Make it viral</div>
+        <div class="share-copy" id="shareText"></div>
+        <div class="share-actions">
+          <button class="btn btn-primary" id="copyButton" type="button">Copy result</button>
+          <a class="btn btn-ghost" id="shareX" target="_blank" rel="noopener">Share on X</a>
+        </div>
+        <div class="copy-status" id="copyStatus">Copied. Your timeline is now mildly dangerous.</div>
+      </div>
+    </section>
+
+    <section class="final-hit-card">
+      <div class="card-title">Final hit</div>
+      <p class="final-hit" id="finalHit"></p>
+    </section>
+  </section>
+</main>
+
+<script>
+const ROASTMINE_AI_PROMPT = `You are RoastMine AI.
+
+Your job is to analyze a website and produce a brutally honest, highly structured roast.
+
+RULES:
+- Be direct, concise, and slightly aggressive (but not insulting).
+- No generic advice.
+- No fluff sentences.
+- Every sentence must feel like a real product critique.
+- Focus on conversion, clarity, trust, UX, and copywriting.
+
+TONE:
+- Brutal
+- Funny but intelligent
+- Startup expert criticizing a bad landing page
+- Zero politeness padding
+
+OUTPUT FORMAT (STRICT - DO NOT DEVIATE):
+
+1. SCORE
+Give a single score out of 100.
+
+2. ONE-LINE VERDICT
+One sentence only. Very sharp.
+
+3. MAIN ROAST (3-6 sentences max)
+Short, punchy, direct criticism of the website.
+
+4. BREAKDOWN
+- Design: (score /10 + 1 sentence)
+- Copywriting: (score /10 + 1 sentence)
+- Conversion: (score /10 + 1 sentence)
+- UX: (score /10 + 1 sentence)
+- Trust: (score /10 + 1 sentence)
+
+5. TOP 3 FIXES
+Bullet points only, extremely actionable.
+
+6. FINAL HIT
+One last brutal sentence to end.
+
+INPUT WEBSITE:
+{url or scraped content here}`;
+
+const params = new URLSearchParams(window.location.search);
+const submittedUrl = params.get('url');
+const loadingScreen = document.getElementById('loadingScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const breakdownTemplates = [
+  {
+    name: 'Design',
+    critiques: [
+      'The page has visual hierarchy, but the hero still makes the CTA compete with background noise instead of owning the screen.',
+      'The layout looks polished until the user needs one obvious next step, then it starts mumbling.',
+      'The brand feels safe, which is another way of saying nobody will remember it after lunch.'
+    ]
+  },
+  {
+    name: 'Copywriting',
+    critiques: [
+      'The copy says what the product is, but it does not stab the buyer pain hard enough to make action feel urgent.',
+      'The headline is too soft; it needs a measurable outcome, not a sentence that could be copied onto ten competitors.',
+      'The value proposition arrives late, wearing a fake mustache and hoping nobody notices.'
+    ]
+  },
+  {
+    name: 'Conversion',
+    critiques: [
+      'The page asks for a click before it has earned enough belief, which is how good traffic quietly becomes bounce rate.',
+      'The CTA exists, but it lacks a reason to act now, so visitors can postpone you into oblivion.',
+      'The funnel has too many trust gaps before the main action, and doubt converts better than your button right now.'
+    ]
+  },
+  {
+    name: 'UX',
+    critiques: [
+      'The flow is understandable, but it makes users assemble the argument themselves like a cheap bookshelf.',
+      'The page needs fewer competing elements and a sharper path from problem to proof to action.',
+      'Mobile users will not reward this much reading before the first meaningful reason to tap.'
+    ]
+  },
+  {
+    name: 'Trust',
+    critiques: [
+      'The site wants credibility without showing enough proof, which is basically asking strangers to clap for a resume.',
+      'There is not enough evidence above the fold, so the promise feels bigger than the receipts.',
+      'Trust signals are either missing or too low on the page, where only your most patient visitors will find them.'
+    ]
+  }
+];
+
+const mainRoastTemplates = [
+  [
+    'This website has a real offer buried under a layer of vague startup fog.',
+    'The hero does not explain the payoff fast enough, the CTA is not aggressive enough, and the proof shows up too late to save the first impression.',
+    'It feels like the team optimized for looking legitimate instead of making the visitor desperately understand why this matters now.'
+  ],
+  [
+    'The site is not broken, which is the nicest thing the data would probably say about it.',
+    'It looks competent, then immediately starts leaking conversions through unclear messaging, weak urgency, and proof that arrives after the user already got suspicious.',
+    'Your page needs to stop decorating the pitch and start selling the outcome.'
+  ],
+  [
+    'This landing page is trying to be premium, but premium without clarity is just expensive confusion.',
+    'The first screen should punch with a benefit, a reason to believe, and a next step; right now it offers a polite shrug in a nice font.',
+    'The product may be good, but the page is making users do detective work before they care.'
+  ],
+  [
+    'There is a decent business hiding here, but the landing page is wearing camouflage.',
+    'The copy needs sharper positioning, the design needs a stronger focal point, and the trust layer needs to appear before skepticism starts charging rent.',
+    'Nothing here is fatal, but enough small leaks together can drown a funnel.'
+  ]
+];
+
+const topFixes = [
+  'Rewrite the hero headline into one concrete outcome for one specific buyer.',
+  'Move proof above the fold: logos, numbers, testimonials, or one brutal before-after metric.',
+  'Make the primary CTA visually dominant and repeat it after every proof section.',
+  'Cut every generic claim that could appear on a competitor site and replace it with a specific result.',
+  'Add a short objection-handling FAQ directly under the core offer.',
+  'Simplify the mobile hero so the benefit, proof, and CTA fit inside the first viewport.'
+];
+
+const finalHits = [
+  'Right now the site looks like it wants applause more than customers.',
+  'The offer may be useful, but the page is making it work a minimum-wage sales job.',
+  'This is not a bad website; it is a good website committing conversion crimes.',
+  'If clarity were oxygen, this landing page would be breathing through a cocktail straw.'
+];
+
+function buildRoastPrompt(inputWebsite) {
+  return ROASTMINE_AI_PROMPT.replace('{url or scraped content here}', inputWebsite);
+}
+
+function hashUrl(url) {
+  return [...url].reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0);
+}
+
+function pick(items, seed, offset = 0) {
+  return items[Math.abs(seed + offset) % items.length];
+}
+
+function normalizeUrl(url) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+    return parsed.href;
+  } catch (error) {
+    return null;
+  }
+}
+
+function generatePromptDrivenMockRoast(url) {
+  const prompt = buildRoastPrompt(url);
+  const seed = hashUrl(prompt);
+  const hostname = new URL(url).hostname.replace(/^www\./, '');
+  const score = Math.max(24, Math.min(88, 49 + (seed % 40)));
+  const breakdown = breakdownTemplates.map((section, index) => ({
+    name: section.name,
+    score: Math.max(3, Math.min(9, 4 + Math.abs((seed + index * 9) % 6))),
+    critique: pick(section.critiques, seed, index)
+  }));
+
+  return {
+    prompt,
+    url,
+    hostname,
+    score,
+    verdict: score < 50
+      ? `${hostname} is leaking conversions like a bucket with a landing page budget.`
+      : score <= 75
+        ? `${hostname} has a real shot, but the page is still negotiating against itself.`
+        : `${hostname} is strong, but strong pages do not get to be lazy.`,
+    mainRoast: pick(mainRoastTemplates, seed).join(' '),
+    breakdown,
+    fixes: [0, 1, 2].map((_, index) => pick(topFixes, seed, index * 2)),
+    finalHit: pick(finalHits, seed)
+  };
+}
+
+function scoreColor(score) {
+  if (score < 50) return { color: 'var(--red)', glow: 'rgba(191,44,31,.16)' };
+  if (score <= 75) return { color: 'var(--orange)', glow: 'rgba(217,130,43,.15)' };
+  return { color: 'var(--green)', glow: 'rgba(76,175,110,.14)' };
+}
+
+function renderEmptyState() {
+  loadingScreen.style.display = 'none';
+  resultScreen.classList.add('active');
+  resultScreen.innerHTML = `
+    <div class="kicker">// Missing target</div>
+    <h1>Website Roast</h1>
+    <div class="empty-url">
+      No URL was provided. Go back to <a href="index.html">RoastMine</a>, paste a website URL, and let the AI be professionally rude.
+    </div>
+  `;
+}
+
+function renderResult(data) {
+  const colors = scoreColor(data.score);
+  document.documentElement.style.setProperty('--score-color', colors.color);
+  document.documentElement.style.setProperty('--score-glow', colors.glow);
+  document.getElementById('displayUrl').textContent = data.url;
+  document.getElementById('globalScore').textContent = data.score;
+  document.getElementById('scoreVerdict').textContent = data.verdict;
+  document.getElementById('mainRoast').textContent = data.mainRoast;
+  document.getElementById('finalHit').textContent = data.finalHit;
+  document.getElementById('scoreFill').style.width = `${data.score}%`;
+
+  document.getElementById('analysisGrid').innerHTML = data.breakdown.map(section => `
+    <article class="analysis-block">
+      <div class="block-top">
+        <h2 class="block-name">${section.name}</h2>
+        <div class="block-score">${section.score}/10</div>
+      </div>
+      <p class="block-comment">${section.critique}</p>
+    </article>
+  `).join('');
+
+  document.getElementById('actionList').innerHTML = data.fixes.map(action => `<li><span>—</span>${action}</li>`).join('');
+
+  const share = `My website scored ${data.score}/100 on RoastMine AI 🔥`;
+  document.getElementById('shareText').textContent = share;
+  document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(share)}`;
+  document.getElementById('copyButton').addEventListener('click', async () => {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(share);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = share;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+    }
+    const status = document.getElementById('copyStatus');
+    status.style.display = 'block';
+    setTimeout(() => { status.style.display = 'none'; }, 2400);
+  });
+
+  loadingScreen.style.display = 'none';
+  resultScreen.classList.add('active');
+}
+
+const validUrl = normalizeUrl(submittedUrl);
+if (!validUrl) {
+  renderEmptyState();
+} else {
+  const delay = 2000 + Math.floor(Math.random() * 2000);
+  setTimeout(() => renderResult(generatePromptDrivenMockRoast(validUrl)), delay);
+}
+</script>
+</body>
+</html>
