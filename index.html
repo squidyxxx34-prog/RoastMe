@@ -185,6 +185,16 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
       <div class="url-error" id="urlError">Enter a full URL, for example https://example.com.</div>
     </div>
     <span class="hero-fine">No credit card required &nbsp;·&nbsp; 1 free roast</span>
+  <p class="hero-sub">Collez l'URL de votre site. Une IA sans pitié l'analyse, le score, et vous dit exactement ce qui cloche — et ce qu'il faut changer pour convertir.</p>
+  <div class="hero-actions">
+    <div style="width:100%;max-width:720px;">
+      <form class="url-roast-form" id="roastForm">
+        <input class="url-roast-input" id="siteUrl" type="url" placeholder="https://votre-site.com" aria-label="URL du site à analyser" required/>
+        <button class="url-roast-submit" type="submit">Roast my site →</button>
+      </form>
+      <div class="url-error" id="urlError">Entrez une URL complète, par exemple https://example.com.</div>
+    </div>
+    <span class="hero-fine">Aucune CB requise &nbsp;·&nbsp; 1 roast offert</span>
   </div>
   <div class="scroll-hint">Scroll</div>
 </section>
@@ -197,18 +207,24 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
       <div class="step-icon">📝</div>
       <div class="step-title">Paste your URL</div>
       <p class="step-desc">Enter your website address. RoastMine prepares a clear, brutal, conversion-focused critique.</p>
+      <div class="step-title">Collez votre URL</div>
+      <p class="step-desc">Entrez l'adresse de votre site. RoastMine prépare une analyse claire, brutale et orientée conversion.</p>
     </div>
     <div class="step">
       <span class="step-num">02</span>
       <div class="step-icon">🔥</div>
       <div class="step-title">AI judges it</div>
       <p class="step-desc">The model audits design, copywriting, conversion, UX, and trust signals using a ruthless startup lens.</p>
+      <div class="step-title">L'IA vous juge</div>
+      <p class="step-desc">Notre modèle simule un audit de votre design, copywriting, SEO, UX mobile et tunnel de conversion.</p>
     </div>
     <div class="step">
       <span class="step-num">03</span>
       <div class="step-icon">📈</div>
       <div class="step-title">Fix the damage</div>
       <p class="step-desc">Score out of 100, structured breakdown, top fixes, and a shareable punchline. No fluff. No mercy.</p>
+      <div class="step-title">Améliorez</div>
+      <p class="step-desc">Score sur 100, sections détaillées, suggestions concrètes et format partageable. Pas de bullshit, pas de politesse excessive.</p>
     </div>
   </div>
 </section>
@@ -327,7 +343,7 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
 <script>
 // ========== CONFIG ==========
 const SUPABASE_URL = 'https://kovzlayghskvdijragyb.supabase.co';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvdnpsYXlnaHNrdmRpanJhZ3liIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjA5MTQsImV4cCI6MjA4ODc5NjkxNH0.aufaWs5wJoU5Kp5srJznHbA-gdVtf5HntBo-r6Pu_I4';
 // ============================
 
 const { createClient } = supabase;
