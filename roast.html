@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>RoastMine — Website Roast</title>
+<title>RoastMine — Roast Result</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --black:#090909;--charcoal:#111;--panel:#141414;--border:#222;--border2:#2e2e2e;
+  --black:#090909;--charcoal:#111;--border:#222;--border2:#2e2e2e;
   --grey:#444;--muted:#666;--light:#999;--cream:#e8e3da;--white:#f4f0e8;
-  --red:#bf2c1f;--red2:#e03423;--orange:#d9822b;--green:#4caf6e;
+  --red:#bf2c1f;--orange:#d9822b;--green:#4caf6e;
   --font-d:'DM Serif Display',serif;--font-m:'IBM Plex Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{min-height:100vh;background:var(--black);color:var(--cream);font-family:var(--font-m);font-size:14px;line-height:1.6;overflow-x:hidden;cursor:crosshair;}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,0.015) 48px,rgba(255,255,255,0.015) 49px),radial-gradient(circle at 85% 15%,rgba(191,44,31,.14),transparent 34%),radial-gradient(circle at 10% 90%,rgba(255,255,255,.045),transparent 28%);pointer-events:none;z-index:-1;}
+body{min-height:100vh;background:var(--black);color:var(--cream);font-family:var(--font-m);font-size:14px;line-height:1.65;overflow-x:hidden;cursor:crosshair;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.015) 48px,rgba(255,255,255,.015) 49px),radial-gradient(circle at 88% 12%,rgba(191,44,31,.14),transparent 34%);pointer-events:none;z-index:-1;}
 ::selection{background:var(--red);color:#fff;}
 a{color:inherit;text-decoration:none;}
 button{cursor:crosshair;font-family:var(--font-m);}
@@ -24,7 +24,7 @@ nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-con
 .logo-flame{color:var(--red);font-style:italic;}
 .nav-link{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .15s;}
 .nav-link:hover{color:var(--white);}
-main{width:min(1180px,calc(100% - 96px));margin:0 auto;padding:72px 0 92px;}
+main{width:min(760px,calc(100% - 40px));margin:0 auto;padding:64px 0 88px;}
 .loading{min-height:calc(100vh - 72px);display:grid;place-items:center;text-align:center;}
 .loading-card{width:min(620px,100%);border:1px solid var(--border);background:rgba(17,17,17,.78);padding:58px 42px;box-shadow:0 30px 120px rgba(0,0,0,.36);}
 .loader-mark{width:58px;height:58px;margin:0 auto 28px;border:1px solid var(--border2);display:grid;place-items:center;color:var(--red);font-family:var(--font-d);font-size:30px;animation:pulse 1.1s ease-in-out infinite;}
@@ -36,52 +36,37 @@ main{width:min(1180px,calc(100% - 96px));margin:0 auto;padding:72px 0 92px;}
 .result{display:none;}
 .result.active{display:block;animation:up .55s ease both;}
 @keyframes up{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-.result-header{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:end;margin-bottom:46px;}
-.kicker{font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:22px;}
-h1{font-family:var(--font-d);font-size:clamp(56px,9vw,116px);line-height:.9;letter-spacing:-2px;color:var(--white);}
-.analyzed-url{margin-top:22px;color:var(--muted);font-size:12px;word-break:break-all;}
-.analyzed-url span{color:var(--light);}
-.score-card{border:1px solid var(--border);background:rgba(17,17,17,.82);padding:34px;position:relative;overflow:hidden;}
-.score-card::after{content:'';position:absolute;right:-70px;top:-70px;width:190px;height:190px;border-radius:50%;background:var(--score-glow,rgba(191,44,31,.16));filter:blur(4px);}
-.score-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
-.score-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:26px;position:relative;z-index:1;}
-.score-number{font-family:var(--font-d);font-size:96px;line-height:.82;color:var(--score-color,var(--red));}
-.score-max{color:var(--grey);font-size:16px;margin-bottom:12px;}
-.score-verdict{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--score-color,var(--red));}
-.score-bar{height:5px;background:var(--border2);overflow:hidden;margin-top:10px;}
-.score-fill{height:100%;width:0;background:var(--score-color,var(--red));transition:width .9s ease .25s;}
-.roast-card{border:1px solid var(--border);background:rgba(255,255,255,.018);padding:42px 44px;margin-bottom:34px;}
-.card-title{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:18px;display:flex;align-items:center;gap:14px;}
-.card-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.roast-text{font-family:var(--font-d);font-size:clamp(28px,4vw,44px);line-height:1.13;color:var(--white);letter-spacing:-.5px;}
-.analysis-grid{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);margin-bottom:34px;}
-.analysis-block{padding:28px 24px;border-right:1px solid var(--border);background:rgba(17,17,17,.58);}
-.analysis-block:last-child{border-right:none;}
-.block-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:22px;}
-.block-name{font-family:var(--font-d);font-size:25px;color:var(--white);line-height:1;}
-.block-score{font-size:12px;color:var(--red);white-space:nowrap;}
-.block-comment{color:var(--light);font-size:12px;line-height:1.75;margin-bottom:18px;font-weight:300;}
-.final-hit-card{border:1px solid var(--border);background:rgba(191,44,31,.055);padding:34px;margin-bottom:34px;}
-.final-hit{font-family:var(--font-d);font-size:clamp(24px,3vw,34px);line-height:1.18;color:var(--white);}
-.block-suggestion{border-top:1px solid var(--border);padding-top:16px;color:var(--cream);font-size:12px;line-height:1.65;}
-.bottom-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;}
-.suggestions,.share{border:1px solid var(--border);background:rgba(17,17,17,.72);padding:34px;}
-.action-list{list-style:none;display:grid;gap:16px;}
-.action-list li{display:grid;grid-template-columns:auto 1fr;gap:12px;color:var(--light);font-size:13px;line-height:1.7;}
-.action-list span{color:var(--red);}
-.share-copy{border:1px solid var(--border2);background:#0d0d0d;color:var(--white);padding:18px;margin-bottom:18px;font-size:13px;line-height:1.7;}
-.share-actions{display:flex;gap:12px;flex-wrap:wrap;}
-.btn{border:none;padding:14px 20px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:background .15s,color .15s,border-color .15s;}
-.btn-primary{background:var(--white);color:var(--black);}
-.btn-primary:hover{background:var(--red);color:#fff;}
-.btn-ghost{background:transparent;color:var(--cream);border:1px solid var(--border2);}
-.btn-ghost:hover{border-color:var(--red);color:var(--white);}
-.copy-status{display:none;margin-top:14px;color:var(--green);font-size:11px;}
+.result-box{border:1px solid var(--border2);background:rgba(17,17,17,.74);padding:22px 24px;margin-bottom:46px;box-shadow:0 30px 100px rgba(0,0,0,.24);}
+.result-box-title{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-bottom:6px;}
+.result-url{font-size:13px;color:var(--light);word-break:break-all;}
+.score-block{text-align:center;margin:0 auto 42px;}
+.score-label{font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.score-value{font-family:var(--font-d);font-size:clamp(58px,12vw,104px);line-height:.9;color:var(--score-color,var(--red));letter-spacing:-1px;}
+.score-value span{font-family:var(--font-m);font-size:18px;color:var(--grey);letter-spacing:0;}
+.score-line{font-size:15px;color:var(--white);margin-top:18px;font-style:italic;}
+.rule{height:1px;background:var(--border2);margin:38px 0;}
+.section-title{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-bottom:18px;}
+.verdict-text{font-size:17px;color:var(--cream);line-height:1.85;white-space:pre-line;}
+.breakdown{display:grid;gap:11px;}
+.breakdown-row{display:grid;grid-template-columns:132px 58px 1fr;gap:14px;align-items:start;color:var(--light);}
+.breakdown-name{color:var(--white);font-weight:600;}
+.breakdown-score{color:var(--score-color,var(--red));white-space:nowrap;}
+.breakdown-comment{color:var(--light);}
+.bullet-list{list-style:none;display:grid;gap:10px;color:var(--light);}
+.bullet-list li{display:grid;grid-template-columns:auto 1fr;gap:12px;}
+.bullet-list li::before{content:'•';color:var(--red);font-weight:600;}
+.share-line-box{border:1px solid var(--border2);background:rgba(255,255,255,.018);padding:24px;margin-bottom:24px;text-align:center;}
+.share-line-text{font-size:18px;line-height:1.55;color:var(--white);font-style:italic;}
+.share-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+.btn{border:1px solid var(--border2);background:transparent;color:var(--cream);padding:13px 24px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;transition:background .15s,color .15s,border-color .15s;}
+.btn:hover{border-color:var(--red);color:var(--white);}
+.btn-primary{background:var(--white);color:var(--black);border-color:var(--white);}
+.btn-primary:hover{background:var(--red);border-color:var(--red);color:#fff;}
+.copy-status{display:none;margin-top:16px;color:var(--green);font-size:11px;text-align:center;}
 .empty-url{border:1px solid var(--border);background:rgba(17,17,17,.78);padding:44px;margin-top:34px;color:var(--light);}
+.empty-url h1{font-family:var(--font-d);font-size:clamp(48px,8vw,84px);line-height:.95;color:var(--white);margin-bottom:18px;}
 .empty-url a{color:var(--white);border-bottom:1px solid var(--red);}
-@media(max-width:980px){main{width:calc(100% - 40px);padding:48px 0 68px;}nav{padding:16px 20px;}.result-header,.bottom-grid{grid-template-columns:1fr;}.analysis-grid{grid-template-columns:1fr 1fr;}.analysis-block{border-bottom:1px solid var(--border);}.analysis-block:nth-child(2n){border-right:none;}}
-@media(max-width:620px){.analysis-grid{grid-template-columns:1fr;}.analysis-block{border-right:none;}.roast-card,.suggestions,.share,.score-card,.final-hit-card{padding:26px 22px;}h1{font-size:52px;}.score-number{font-size:82px;}.loading-card{padding:42px 24px;}}
-@media(max-width:620px){.analysis-grid{grid-template-columns:1fr;}.analysis-block{border-right:none;}.roast-card,.suggestions,.share,.score-card{padding:26px 22px;}h1{font-size:52px;}.score-number{font-size:82px;}.loading-card{padding:42px 24px;}}
+@media(max-width:720px){nav{padding:16px 20px;}main{padding:44px 0 68px;}.breakdown-row{grid-template-columns:1fr;gap:2px;border-bottom:1px solid var(--border);padding-bottom:12px;}.breakdown-row:last-child{border-bottom:none;padding-bottom:0;}.score-line{font-size:13px;}.share-line-text{font-size:16px;}}
 </style>
 </head>
 <body>
@@ -94,258 +79,196 @@ h1{font-family:var(--font-d);font-size:clamp(56px,9vw,116px);line-height:.9;lett
   <section class="loading" id="loadingScreen" aria-live="polite">
     <div class="loading-card">
       <div class="loader-mark">✶</div>
-      <h1>Website Roast</h1>
+      <h1>Roast Result</h1>
       <p><span class="dots">Analyzing your website</span></p>
     </div>
   </section>
 
   <section class="result" id="resultScreen">
-    <header class="result-header">
-      <div>
-        <div class="kicker">// Brutal conversion audit</div>
-        <h1>Website Roast</h1>
-        <p class="analyzed-url">Analyzed URL: <span id="displayUrl"></span></p>
-      </div>
-      <aside class="score-card" id="scoreCard">
-        <div class="score-label">Global score</div>
-        <div class="score-row">
-          <div class="score-number" id="globalScore">0</div>
-          <div class="score-max">/100</div>
-        </div>
-        <div class="score-verdict" id="scoreVerdict">Loading verdict</div>
-        <div class="score-bar"><div class="score-fill" id="scoreFill"></div></div>
-      </aside>
+    <header class="result-box">
+      <div class="result-box-title">Roast Result</div>
+      <div class="result-url" id="displayUrl"></div>
     </header>
 
-    <section class="roast-card">
-      <div class="card-title">Main roast</div>
-      <p class="roast-text" id="mainRoast"></p>
+    <section class="score-block" aria-label="Website score">
+      <div class="score-label">Score</div>
+      <div class="score-value"><span id="globalScore">0</span> <span>/ 100</span></div>
+      <div class="score-line" id="scoreLine"></div>
     </section>
 
-    <section class="analysis-grid" id="analysisGrid" aria-label="Website analysis breakdown"></section>
+    <div class="rule"></div>
 
-    <section class="bottom-grid">
-      <div class="suggestions">
-        <div class="card-title">Top 3 fixes</div>
-    <section class="analysis-grid" id="analysisGrid" aria-label="Website analysis sections"></section>
+    <section>
+      <h2 class="section-title">Verdict</h2>
+      <p class="verdict-text" id="verdictText"></p>
+    </section>
 
-    <section class="bottom-grid">
-      <div class="suggestions">
-        <div class="card-title">Actionable fixes</div>
-        <ul class="action-list" id="actionList"></ul>
+    <div class="rule"></div>
+
+    <section>
+      <h2 class="section-title">Breakdown</h2>
+      <div class="breakdown" id="breakdownList"></div>
+    </section>
+
+    <div class="rule"></div>
+
+    <section>
+      <h2 class="section-title">Main Problems</h2>
+      <ul class="bullet-list" id="problemsList"></ul>
+    </section>
+
+    <div class="rule"></div>
+
+    <section>
+      <h2 class="section-title">Quick Fixes</h2>
+      <ul class="bullet-list" id="fixesList"></ul>
+    </section>
+
+    <div class="rule"></div>
+
+    <section>
+      <h2 class="section-title">Share Line</h2>
+      <div class="share-line-box">
+        <p class="share-line-text" id="shareLine"></p>
       </div>
-      <div class="share">
-        <div class="card-title">Make it viral</div>
-        <div class="share-copy" id="shareText"></div>
-        <div class="share-actions">
-          <button class="btn btn-primary" id="copyButton" type="button">Copy result</button>
-          <a class="btn btn-ghost" id="shareX" target="_blank" rel="noopener">Share on X</a>
-        </div>
-        <div class="copy-status" id="copyStatus">Copied. Your timeline is now mildly dangerous.</div>
+      <div class="share-actions">
+        <button class="btn btn-primary" id="copyButton" type="button">Copy</button>
+        <a class="btn" id="shareX" target="_blank" rel="noopener">Share</a>
       </div>
+      <div class="copy-status" id="copyStatus">Copied. Now go make your timeline uncomfortable.</div>
     </section>
 
-    <section class="final-hit-card">
-      <div class="card-title">Final hit</div>
-      <p class="final-hit" id="finalHit"></p>
-    </section>
+    <div class="rule"></div>
   </section>
 </main>
 
 <script>
-const ROASTMINE_AI_PROMPT = `You are RoastMine AI.
+const ROAST_RESULT_PROMPT = `You are RoastMine AI.
 
-Your job is to analyze a website and produce a brutally honest, highly structured roast.
+Analyze the submitted website and return the roast in this exact user-facing format:
 
-RULES:
-- Be direct, concise, and slightly aggressive (but not insulting).
+ROAST RESULT
+{url}
+
+SCORE
+{score} / 100
+"{one sharp score line}"
+
+VERDICT
+3 short sentences. Brutal, useful, conversion-focused.
+
+BREAKDOWN
+Design        {score}/10  → {one sentence}
+Copywriting   {score}/10  → {one sentence}
+Conversion    {score}/10  → {one sentence}
+UX            {score}/10  → {one sentence}
+Trust         {score}/10  → {one sentence}
+
+MAIN PROBLEMS
+5 bullets only. No fluff.
+
+QUICK FIXES
+5 bullets only. Extremely actionable.
+
+SHARE LINE
+"{one viral brutal sentence}"
+
+Rules:
+- Be direct, concise, and slightly aggressive without being insulting.
 - No generic advice.
-- No fluff sentences.
 - Every sentence must feel like a real product critique.
-- Focus on conversion, clarity, trust, UX, and copywriting.
-
-TONE:
-- Brutal
-- Funny but intelligent
-- Startup expert criticizing a bad landing page
-- Zero politeness padding
-
-OUTPUT FORMAT (STRICT - DO NOT DEVIATE):
-
-1. SCORE
-Give a single score out of 100.
-
-2. ONE-LINE VERDICT
-One sentence only. Very sharp.
-
-3. MAIN ROAST (3-6 sentences max)
-Short, punchy, direct criticism of the website.
-
-4. BREAKDOWN
-- Design: (score /10 + 1 sentence)
-- Copywriting: (score /10 + 1 sentence)
-- Conversion: (score /10 + 1 sentence)
-- UX: (score /10 + 1 sentence)
-- Trust: (score /10 + 1 sentence)
-
-5. TOP 3 FIXES
-Bullet points only, extremely actionable.
-
-6. FINAL HIT
-One last brutal sentence to end.
-
-INPUT WEBSITE:
-{url or scraped content here}`;
+- Focus on conversion, clarity, trust, UX, and copywriting.`;
 
 const params = new URLSearchParams(window.location.search);
 const submittedUrl = params.get('url');
 const loadingScreen = document.getElementById('loadingScreen');
 const resultScreen = document.getElementById('resultScreen');
 
-const breakdownTemplates = [
-  {
-    name: 'Design',
-    critiques: [
-      'The page has visual hierarchy, but the hero still makes the CTA compete with background noise instead of owning the screen.',
-      'The layout looks polished until the user needs one obvious next step, then it starts mumbling.',
-      'The brand feels safe, which is another way of saying nobody will remember it after lunch.'
-const sectionTemplates = [
-  {
-    name: 'Design',
-    comments: [
-      'The visual hierarchy is whispering when it should be yelling. Your hero section needs one obvious focal point.',
-      'The layout is clean enough, but it feels like the brand personality left the meeting early.',
-      'Decent bones. Now give the above-the-fold area a sharper contrast and a CTA that does not hide like a tax receipt.'
-    ],
-    suggestions: [
-      'Create one dominant hero message, then make the primary button visually impossible to miss.',
-      'Add a stronger color accent and remove decorative elements that do not guide the eye.',
-      'Use spacing and contrast to push the CTA, proof, and benefit into a clear reading order.'
-    ]
-  },
-  {
-    name: 'Copywriting',
-    critiques: [
-      'The copy says what the product is, but it does not stab the buyer pain hard enough to make action feel urgent.',
-      'The headline is too soft; it needs a measurable outcome, not a sentence that could be copied onto ten competitors.',
-      'The value proposition arrives late, wearing a fake mustache and hoping nobody notices.'
-    comments: [
-      'Your headline sounds like it was approved by a committee that fears adjectives. The benefit is not instantly clear.',
-      'The copy explains what exists, not why anyone should care. That is a brochure, not a sales page.',
-      'Too much vague promise, not enough concrete outcome. Users should understand the win in three seconds.'
-    ],
-    suggestions: [
-      'Rewrite the hero into one sentence: who it helps, what outcome they get, and why it is faster or better.',
-      'Replace generic claims with specific outcomes, numbers, use cases, or before/after proof.',
-      'Move the strongest benefit above the fold and cut any sentence that could fit a competitor.'
-    ]
-  },
-  {
-    name: 'Conversion',
-    critiques: [
-      'The page asks for a click before it has earned enough belief, which is how good traffic quietly becomes bounce rate.',
-      'The CTA exists, but it lacks a reason to act now, so visitors can postpone you into oblivion.',
-      'The funnel has too many trust gaps before the main action, and doubt converts better than your button right now.'
-    ]
-  },
-  {
-    name: 'UX',
-    critiques: [
-      'The flow is understandable, but it makes users assemble the argument themselves like a cheap bookshelf.',
-      'The page needs fewer competing elements and a sharper path from problem to proof to action.',
-      'Mobile users will not reward this much reading before the first meaningful reason to tap.'
-    ]
-  },
-  {
-    name: 'Trust',
-    critiques: [
-      'The site wants credibility without showing enough proof, which is basically asking strangers to clap for a resume.',
-      'There is not enough evidence above the fold, so the promise feels bigger than the receipts.',
-      'Trust signals are either missing or too low on the page, where only your most patient visitors will find them.'
-    ]
-  }
-];
+const breakdownTemplates = {
+  Design: [
+    'Clean, but lacks hierarchy and focus.',
+    'Polished enough to pass, not sharp enough to guide attention.',
+    'Looks composed, but the eye has no obvious place to land.'
+  ],
+  Copywriting: [
+    'Describes features, not value.',
+    'Talks like a product sheet when it needs to sound like a buyer outcome.',
+    'Too much explanation, not enough reason to care.'
+  ],
+  Conversion: [
+    'No strong CTA or urgency.',
+    'The page gives visitors too many chances to do nothing.',
+    'The next step exists, but it does not feel important.'
+  ],
+  UX: [
+    'Usable but directionless.',
+    'The path is technically clear, emotionally weak.',
+    'Nothing is broken, but nothing pushes the user forward either.'
+  ],
+  Trust: [
+    'No proof or credibility signals.',
+    'The claim is bigger than the evidence supporting it.',
+    'Trust arrives too late for a skeptical visitor.'
+  ]
+};
 
-const mainRoastTemplates = [
+const verdicts = [
   [
-    'This website has a real offer buried under a layer of vague startup fog.',
-    'The hero does not explain the payoff fast enough, the CTA is not aggressive enough, and the proof shows up too late to save the first impression.',
-    'It feels like the team optimized for looking legitimate instead of making the visitor desperately understand why this matters now.'
+    'Your website is not confusing — it is just forgettable.',
+    'Nothing creates urgency or attention in the first seconds.',
+    'It looks complete, but it does not perform.'
   ],
   [
-    'The site is not broken, which is the nicest thing the data would probably say about it.',
-    'It looks competent, then immediately starts leaking conversions through unclear messaging, weak urgency, and proof that arrives after the user already got suspicious.',
-    'Your page needs to stop decorating the pitch and start selling the outcome.'
+    'Your website has the shape of a landing page and the persuasion of a waiting room poster.',
+    'The offer is present, but the reason to act is weak.',
+    'People can understand it and still feel absolutely nothing.'
   ],
   [
-    'This landing page is trying to be premium, but premium without clarity is just expensive confusion.',
-    'The first screen should punch with a benefit, a reason to believe, and a next step; right now it offers a polite shrug in a nice font.',
-    'The product may be good, but the page is making users do detective work before they care.'
+    'Your website is clean enough to avoid embarrassment, which is not the same as converting.',
+    'The first screen fails to create a sharp reason to stay.',
+    'It explains the product, then forgets to sell the outcome.'
   ],
   [
-    'There is a decent business hiding here, but the landing page is wearing camouflage.',
-    'The copy needs sharper positioning, the design needs a stronger focal point, and the trust layer needs to appear before skepticism starts charging rent.',
-    'Nothing here is fatal, but enough small leaks together can drown a funnel.'
+    'Your website looks like it was designed by someone who wanted approval, not action.',
+    'The page is tidy, but tidy does not create demand.',
+    'The funnel needs pressure, proof, and a clearer promise.'
   ]
 ];
 
-const topFixes = [
-  'Rewrite the hero headline into one concrete outcome for one specific buyer.',
-  'Move proof above the fold: logos, numbers, testimonials, or one brutal before-after metric.',
-  'Make the primary CTA visually dominant and repeat it after every proof section.',
-  'Cut every generic claim that could appear on a competitor site and replace it with a specific result.',
-  'Add a short objection-handling FAQ directly under the core offer.',
-  'Simplify the mobile hero so the benefit, proof, and CTA fit inside the first viewport.'
+const scoreLines = [
+  'Fails at convincing users to care',
+  'Looks fine, sells weakly',
+  'Too polished to ignore, too vague to convert',
+  'Competent design, undercooked persuasion'
 ];
 
-const finalHits = [
-  'Right now the site looks like it wants applause more than customers.',
-  'The offer may be useful, but the page is making it work a minimum-wage sales job.',
-  'This is not a bad website; it is a good website committing conversion crimes.',
-  'If clarity were oxygen, this landing page would be breathing through a cocktail straw.'
+const mainProblems = [
+  'No clear value proposition in first 3 seconds',
+  'Weak CTA visibility',
+  'No emotional hook',
+  'No trust signals',
+  'No differentiation',
+  'The hero section makes visitors work too hard',
+  'The page does not create urgency',
+  'The offer sounds interchangeable'
 ];
 
-function buildRoastPrompt(inputWebsite) {
-  return ROASTMINE_AI_PROMPT.replace('{url or scraped content here}', inputWebsite);
-}
+const quickFixes = [
+  'Rewrite hero section to state clear outcome',
+  'Make CTA dominant and repeated',
+  'Add social proof above fold',
+  'Remove non-essential sections',
+  'Focus page on single action',
+  'Replace feature claims with buyer outcomes',
+  'Add one proof point beside the first CTA',
+  'Cut any headline a competitor could reuse'
+];
 
-    comments: [
-      'The conversion path has speed bumps where it needs a runway. Too many moments ask visitors to think.',
-      'Your CTA is present, but not persuasive. It needs context, urgency, and a reason to click now.',
-      'The page asks for trust before earning it. Add proof before the user starts negotiating with their doubts.'
-    ],
-    suggestions: [
-      'Place a primary CTA above the fold, repeat it after proof, and remove competing actions.',
-      'Add social proof, customer logos, testimonials, or usage metrics close to the CTA.',
-      'Reduce form friction and explain exactly what happens after the click.'
-    ]
-  },
-  {
-    name: 'SEO',
-    comments: [
-      'Search engines need context, not mystery. Your page should target a clear problem and category.',
-      'The content looks thin for organic acquisition. Google cannot rank vibes, unfortunately.',
-      'Your keywords need to match buyer intent instead of founder poetry.'
-    ],
-    suggestions: [
-      'Use a descriptive title, one clear H1, and section headings that include the problem and audience.',
-      'Add FAQ content that answers high-intent objections and comparison searches.',
-      'Create supporting pages for use cases, alternatives, and pain-point keywords.'
-    ]
-  },
-  {
-    name: 'Mobile UX',
-    comments: [
-      'Mobile users are impatient gremlins. If the CTA or value prop requires scrolling archaeology, you lose.',
-      'The mobile experience needs tighter spacing and faster access to the main action.',
-      'Readable, but not ruthless. Mobile should strip the page down to benefit, proof, CTA.'
-    ],
-    suggestions: [
-      'Keep the hero headline short on small screens and put the CTA inside the first viewport.',
-      'Increase tap targets, reduce dense text blocks, and test the layout on a real phone.',
-      'Move trust signals and the first proof point higher on mobile.'
-    ]
-  }
+const shareLines = [
+  'This website does not fail at design — it fails at convincing anyone to care.',
+  'This site looks finished, but the persuasion clocked out early.',
+  'The page is clean, but clean does not pay the bills if nobody clicks.',
+  'This website is not broken; it is just aggressively forgettable.'
 ];
 
 function hashUrl(url) {
@@ -354,6 +277,11 @@ function hashUrl(url) {
 
 function pick(items, seed, offset = 0) {
   return items[Math.abs(seed + offset) % items.length];
+}
+
+function rotatePick(items, seed, count) {
+  const start = Math.abs(seed) % items.length;
+  return Array.from({ length: count }, (_, index) => items[(start + index) % items.length]);
 }
 
 function normalizeUrl(url) {
@@ -367,122 +295,85 @@ function normalizeUrl(url) {
   }
 }
 
-function generatePromptDrivenMockRoast(url) {
-  const prompt = buildRoastPrompt(url);
+function generateRoastResult(url) {
+  const prompt = ROAST_RESULT_PROMPT.replace('{url}', url);
   const seed = hashUrl(prompt);
-  const hostname = new URL(url).hostname.replace(/^www\./, '');
-  const score = Math.max(24, Math.min(88, 49 + (seed % 40)));
-  const breakdown = breakdownTemplates.map((section, index) => ({
-    name: section.name,
-    score: Math.max(3, Math.min(9, 4 + Math.abs((seed + index * 9) % 6))),
-    critique: pick(section.critiques, seed, index)
-  }));
-
-  return {
-    prompt,
-    url,
-    hostname,
-    score,
-    verdict: score < 50
-      ? `${hostname} is leaking conversions like a bucket with a landing page budget.`
-      : score <= 75
-        ? `${hostname} has a real shot, but the page is still negotiating against itself.`
-        : `${hostname} is strong, but strong pages do not get to be lazy.`,
-    mainRoast: pick(mainRoastTemplates, seed).join(' '),
-    breakdown,
-    fixes: [0, 1, 2].map((_, index) => pick(topFixes, seed, index * 2)),
-    finalHit: pick(finalHits, seed)
-function generateMockRoast(url) {
-  const seed = hashUrl(url);
-  const hostname = new URL(url).hostname.replace(/^www\./, '');
-  const score = Math.max(28, Math.min(91, 54 + (seed % 37)));
-  const roasts = [
-    `Your website for ${hostname} has potential, but right now it explains itself like someone pitching through a bathroom door. The CTA is too shy, the value proposition takes too long to land, and the page needs proof before asking for trust.`,
-    `${hostname} is not a disaster, but it is flirting with one. The design looks premium-ish, then the copy walks in wearing socks with sandals. Make the promise sharper, make the CTA louder, and show proof before visitors escape.`,
-    `Your site looks like it wants to convert, but it forgot to bring a map. Visitors should know what you do, why it matters, and what to click within three seconds. Right now, the page is making them assemble the IKEA furniture themselves.`,
-    `${hostname} has enough good ingredients to avoid the trash fire label, but the recipe is messy. The hero needs a clearer benefit, the trust signals need to move up, and the mobile journey should stop treating thumbs like precision instruments.`
-  ];
-
-  const sections = sectionTemplates.map((section, index) => ({
-    name: section.name,
-    score: Math.max(3, Math.min(9, 5 + ((seed + index * 7) % 5))),
-    comment: pick(section.comments, seed, index),
-    suggestion: pick(section.suggestions, seed, index * 2)
-  }));
-
-  const actions = [
-    'Rewrite your hero section to explain the customer benefit in one plain sentence.',
-    'Make the primary CTA button more visible and repeat it after every major proof section.',
-    'Add social proof above the fold: logos, testimonials, user count, revenue impact, or case-study numbers.',
-    'Cut generic claims and replace them with specific outcomes your target buyer actually wants.',
-    'Simplify mobile: shorter headline, larger tap targets, less paragraph soup.',
-    'Add an FAQ section that handles pricing, trust, implementation, and competitor objections.'
-  ];
+  const score = Math.max(24, Math.min(88, 50 + (seed % 39)));
+  const categories = ['Design', 'Copywriting', 'Conversion', 'UX', 'Trust'];
 
   return {
     url,
-    hostname,
     score,
-    verdict: score < 50 ? 'Needs a fire extinguisher' : score <= 75 ? 'Promising, but bruised' : 'Solid with sharp edges',
-    roast: pick(roasts, seed),
-    sections,
-    actions: actions.slice(0, 3 + Math.abs(seed % 4))
+    scoreLine: pick(scoreLines, seed),
+    verdict: pick(verdicts, seed).join('\n'),
+    breakdown: categories.map((name, index) => ({
+      name,
+      score: Math.max(3, Math.min(8, 4 + Math.abs((seed + index * 7) % 5))),
+      comment: pick(breakdownTemplates[name], seed, index)
+    })),
+    problems: rotatePick(mainProblems, seed, 5),
+    fixes: rotatePick(quickFixes, seed + 3, 5),
+    shareLine: pick(shareLines, seed)
   };
 }
 
 function scoreColor(score) {
-  if (score < 50) return { color: 'var(--red)', glow: 'rgba(191,44,31,.16)' };
-  if (score <= 75) return { color: 'var(--orange)', glow: 'rgba(217,130,43,.15)' };
-  return { color: 'var(--green)', glow: 'rgba(76,175,110,.14)' };
+  if (score < 50) return 'var(--red)';
+  if (score <= 75) return 'var(--orange)';
+  return 'var(--green)';
 }
 
 function renderEmptyState() {
   loadingScreen.style.display = 'none';
   resultScreen.classList.add('active');
   resultScreen.innerHTML = `
-    <div class="kicker">// Missing target</div>
-    <h1>Website Roast</h1>
     <div class="empty-url">
-      No URL was provided. Go back to <a href="index.html">RoastMine</a>, paste a website URL, and let the AI be professionally rude.
+      <h1>Roast Result</h1>
+      <p>No URL was provided. Go back to <a href="index.html">RoastMine</a>, paste a website URL, and let the AI be professionally rude.</p>
     </div>
   `;
 }
 
+function renderBullets(elementId, items) {
+  const list = document.getElementById(elementId);
+  list.innerHTML = '';
+  items.forEach(item => {
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = item;
+    li.appendChild(span);
+    list.appendChild(li);
+  });
+}
+
 function renderResult(data) {
-  const colors = scoreColor(data.score);
-  document.documentElement.style.setProperty('--score-color', colors.color);
-  document.documentElement.style.setProperty('--score-glow', colors.glow);
+  document.documentElement.style.setProperty('--score-color', scoreColor(data.score));
   document.getElementById('displayUrl').textContent = data.url;
   document.getElementById('globalScore').textContent = data.score;
-  document.getElementById('scoreVerdict').textContent = data.verdict;
-  document.getElementById('mainRoast').textContent = data.mainRoast;
-  document.getElementById('finalHit').textContent = data.finalHit;
-  document.getElementById('scoreFill').style.width = `${data.score}%`;
+  document.getElementById('scoreLine').textContent = `"${data.scoreLine}"`;
+  document.getElementById('verdictText').textContent = data.verdict;
+  document.getElementById('shareLine').textContent = `"${data.shareLine}"`;
 
-  document.getElementById('analysisGrid').innerHTML = data.breakdown.map(section => `
-  document.getElementById('mainRoast').textContent = data.roast;
-  document.getElementById('scoreFill').style.width = `${data.score}%`;
+  const breakdown = document.getElementById('breakdownList');
+  breakdown.innerHTML = '';
+  data.breakdown.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'breakdown-row';
+    row.innerHTML = `
+      <div class="breakdown-name"></div>
+      <div class="breakdown-score"></div>
+      <div class="breakdown-comment"></div>
+    `;
+    row.querySelector('.breakdown-name').textContent = item.name;
+    row.querySelector('.breakdown-score').textContent = `${item.score}/10`;
+    row.querySelector('.breakdown-comment').textContent = `→ ${item.comment}`;
+    breakdown.appendChild(row);
+  });
 
-  document.getElementById('analysisGrid').innerHTML = data.sections.map(section => `
-    <article class="analysis-block">
-      <div class="block-top">
-        <h2 class="block-name">${section.name}</h2>
-        <div class="block-score">${section.score}/10</div>
-      </div>
-      <p class="block-comment">${section.critique}</p>
-    </article>
-  `).join('');
+  renderBullets('problemsList', data.problems);
+  renderBullets('fixesList', data.fixes);
 
-  document.getElementById('actionList').innerHTML = data.fixes.map(action => `<li><span>—</span>${action}</li>`).join('');
-      <p class="block-comment">${section.comment}</p>
-      <p class="block-suggestion">→ ${section.suggestion}</p>
-    </article>
-  `).join('');
-
-  document.getElementById('actionList').innerHTML = data.actions.map(action => `<li><span>—</span>${action}</li>`).join('');
-
-  const share = `My website scored ${data.score}/100 on RoastMine AI 🔥`;
-  document.getElementById('shareText').textContent = share;
+  const share = data.shareLine;
   document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(share)}`;
   document.getElementById('copyButton').addEventListener('click', async () => {
     if (navigator.clipboard && window.isSecureContext) {
@@ -511,8 +402,7 @@ if (!validUrl) {
   renderEmptyState();
 } else {
   const delay = 2000 + Math.floor(Math.random() * 2000);
-  setTimeout(() => renderResult(generatePromptDrivenMockRoast(validUrl)), delay);
-  setTimeout(() => renderResult(generateMockRoast(validUrl)), delay);
+  setTimeout(() => renderResult(generateRoastResult(validUrl)), delay);
 }
 </script>
 </body>
