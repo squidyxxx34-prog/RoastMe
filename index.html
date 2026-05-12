@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -40,6 +40,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .hero-title em{font-style:italic;color:var(--red);}
 .hero-sub{margin-top:36px;font-size:14px;font-weight:300;color:var(--light);max-width:440px;line-height:1.9;opacity:0;animation:up .7s ease .35s forwards;}
 .hero-actions{margin-top:48px;display:flex;align-items:center;gap:28px;opacity:0;animation:up .7s ease .5s forwards;}
+.url-roast-form{display:flex;align-items:center;gap:0;border:1px solid var(--border2);background:rgba(255,255,255,0.025);max-width:680px;width:100%;}
+.url-roast-input{flex:1;min-width:260px;background:transparent;border:none;color:var(--white);font-family:var(--font-m);font-size:13px;padding:16px 18px;outline:none;}
+.url-roast-input::placeholder{color:var(--grey);}
+.url-roast-submit{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--white);color:var(--black);border:none;padding:16px 28px;transition:background .15s,color .15s;white-space:nowrap;}
+.url-roast-submit:hover{background:var(--red);color:#fff;}
+.url-error{margin-top:12px;font-size:11px;color:var(--red);display:none;}
 .btn-cta{font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--white);color:var(--black);border:none;padding:16px 40px;transition:background .15s,color .15s;display:inline-block;}
 .btn-cta:hover{background:var(--red);color:#fff;}
 .hero-fine{font-size:11px;color:var(--grey);letter-spacing:.04em;}
@@ -148,6 +154,9 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
   footer{flex-direction:column;gap:12px;text-align:center;padding:24px 20px;}
   .modal{margin:16px;padding:28px 20px;}
   .hero-actions{flex-direction:column;align-items:flex-start;}
+  .url-roast-form{flex-direction:column;align-items:stretch;}
+  .url-roast-input{min-width:0;width:100%;}
+  .url-roast-submit{width:100%;}
 }
 </style>
 </head>
@@ -156,50 +165,56 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
 <nav>
   <div class="logo">RoastMine <span class="logo-flame">✶</span></div>
   <div class="nav-r" id="navRight">
-    <button class="btn-nav" onclick="openModal('login')">Se connecter</button>
-    <button class="btn-nav-cta" onclick="openModal('signup')">Essai gratuit</button>
+    <button class="btn-nav" onclick="openModal('login')">Log in</button>
+    <button class="btn-nav-cta" onclick="openModal('signup')">Free roast</button>
   </div>
 </nav>
 
 <section class="hero">
-  <div class="tag">// Analyse IA sans filtre</div>
+  <div class="tag">// Unfiltered AI website roast</div>
   <h1 class="hero-title">
-    Votre business<br/>mérite peut-être<br/><em>d'être jugé.</em>
+    Your website<br/>probably needs<br/><em>a public beating.</em>
   </h1>
-  <p class="hero-sub">Décrivez votre SaaS, startup, ou idée. Une IA sans pitié l'analyse, le score, et vous dit exactement ce qui cloche — et ce qui tient.</p>
+  <p class="hero-sub">Paste your website URL. RoastMine AI scores it, tears down what kills conversions, and tells you exactly what to fix.</p>
   <div class="hero-actions">
-    <button class="btn-cta" onclick="openModal('signup')">Obtenir mon roast gratuit</button>
-    <span class="hero-fine">Aucune CB requise &nbsp;·&nbsp; 1 roast offert</span>
+    <div style="width:100%;max-width:720px;">
+      <form class="url-roast-form" id="roastForm">
+        <input class="url-roast-input" id="siteUrl" type="url" placeholder="https://your-site.com" aria-label="Website URL to analyze" required/>
+        <button class="url-roast-submit" type="submit">Roast my site →</button>
+      </form>
+      <div class="url-error" id="urlError">Enter a full URL, for example https://example.com.</div>
+    </div>
+    <span class="hero-fine">No credit card required &nbsp;·&nbsp; 1 free roast</span>
   </div>
-  <div class="scroll-hint">Défiler</div>
+  <div class="scroll-hint">Scroll</div>
 </section>
 
 <section class="section">
-  <div class="sec-label">Comment ça marche</div>
+  <div class="sec-label">How it works</div>
   <div class="steps">
     <div class="step">
       <span class="step-num">01</span>
       <div class="step-icon">📝</div>
-      <div class="step-title">Décrivez votre projet</div>
-      <p class="step-desc">Nom, URL optionnelle, description de votre business. Plus c'est précis, plus le roast est chirurgical.</p>
+      <div class="step-title">Paste your URL</div>
+      <p class="step-desc">Enter your website address. RoastMine prepares a clear, brutal, conversion-focused critique.</p>
     </div>
     <div class="step">
       <span class="step-num">02</span>
       <div class="step-icon">🔥</div>
-      <div class="step-title">L'IA vous juge</div>
-      <p class="step-desc">Notre modèle analyse votre positionnement, votre proposition de valeur, et identifie avec précision ce qui ne va pas — et ce qui fonctionne.</p>
+      <div class="step-title">AI judges it</div>
+      <p class="step-desc">The model audits design, copywriting, conversion, UX, and trust signals using a ruthless startup lens.</p>
     </div>
     <div class="step">
       <span class="step-num">03</span>
       <div class="step-icon">📈</div>
-      <div class="step-title">Améliorez</div>
-      <p class="step-desc">Score sur 100, points négatifs, points positifs, conseils concrets. Pas de bullshit, pas de politesse excessive.</p>
+      <div class="step-title">Fix the damage</div>
+      <p class="step-desc">Score out of 100, structured breakdown, top fixes, and a shareable punchline. No fluff. No mercy.</p>
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="sec-label">Exemple de résultat</div>
+  <div class="sec-label">Example output</div>
   <div class="example-wrap">
     <div class="example-left">
       <div class="ex-title">TodoPro SaaS</div>
@@ -209,68 +224,68 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
         <div class="score-max">/100</div>
         <div class="score-bar-wrap">
           <div class="score-bar-bg"><div class="score-bar-fill"></div></div>
-          <div class="score-verdict">Problématique</div>
+          <div class="score-verdict">Problematic</div>
         </div>
       </div>
       <div class="ex-block">
-        <div class="ex-block-title bad">💀 Ce qui foire</div>
-        <div class="ex-item"><span>—</span>Énième app de todo dans un marché saturé. Notion, Todoist, TickTick existent depuis 10 ans.</div>
-        <div class="ex-item"><span>—</span>Pas de différenciation. "Simple et rapide" c'est ce que tout le monde dit.</div>
-        <div class="ex-item"><span>—</span>Pricing flou. 3 plans illisibles sans valeur ajoutée claire.</div>
+        <div class="ex-block-title bad">💀 What fails</div>
+        <div class="ex-item"><span>—</span>Another todo app in a market that has been crowded for a decade. Notion, Todoist, and TickTick already own the oxygen.</div>
+        <div class="ex-item"><span>—</span>No differentiation. “Simple and fast” is what every product says when it has nothing sharper to say.</div>
+        <div class="ex-item"><span>—</span>Confusing pricing. Three plans, zero obvious reason to upgrade.</div>
       </div>
     </div>
     <div class="example-right">
       <div class="ex-block">
-        <div class="ex-block-title good">✓ Ce qui tient</div>
-        <div class="ex-item"><span>—</span>UI propre et chargement rapide. Bon point technique.</div>
-        <div class="ex-item"><span>—</span>Intégration calendrier potentiellement utile si mise en avant.</div>
+        <div class="ex-block-title good">✓ What works</div>
+        <div class="ex-item"><span>—</span>Clean UI and fast loading. At least the engineering is not actively sabotaging you.</div>
+        <div class="ex-item"><span>—</span>Calendar integration could matter if it stopped hiding like a legal disclaimer.</div>
       </div>
       <div class="ex-block">
-        <div class="ex-block-title tip">→ Conseils</div>
-        <div class="ex-item"><span>—</span>Choisissez une niche verticale : "todo pour freelances dev" ou "pour agences". Stop le généraliste.</div>
-        <div class="ex-item"><span>—</span>Transformez l'intégration calendrier en argument central, pas en feature cachée.</div>
-        <div class="ex-item"><span>—</span>Simplifiez à 2 plans max avec des différences radicales et compréhensibles.</div>
+        <div class="ex-block-title tip">→ Fixes</div>
+        <div class="ex-item"><span>—</span>Pick a vertical niche: “todo for freelance developers” or “for agencies.” Stop playing generic.</div>
+        <div class="ex-item"><span>—</span>Turn the calendar integration into the core pitch, not a buried feature.</div>
+        <div class="ex-item"><span>—</span>Cut pricing to two plans max with differences a tired buyer can understand in five seconds.</div>
       </div>
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="sec-label">Tarifs</div>
+  <div class="sec-label">Pricing</div>
   <div class="pricing-grid">
     <div class="plan">
       <div class="plan-name">Starter</div>
       <div class="plan-price">0<span>€</span></div>
-      <div class="plan-period">Pour commencer</div>
+      <div class="plan-period">To get started</div>
       <ul class="plan-features">
-        <li><span class="feat-icon ok">✓</span> 1 roast complet offert</li>
-        <li><span class="feat-icon ok">✓</span> Score sur 100</li>
-        <li><span class="feat-icon ok">✓</span> Points positifs &amp; négatifs</li>
-        <li><span class="feat-icon ok">✓</span> Conseils d'amélioration</li>
-        <li><span class="feat-icon" style="color:var(--grey)">✗</span> <span style="color:var(--grey)">Roasts illimités</span></li>
+        <li><span class="feat-icon ok">✓</span> 1 full roast included</li>
+        <li><span class="feat-icon ok">✓</span> Score out of 100</li>
+        <li><span class="feat-icon ok">✓</span> Strengths &amp; failures</li>
+        <li><span class="feat-icon ok">✓</span> Actionable fixes</li>
+        <li><span class="feat-icon" style="color:var(--grey)">✗</span> <span style="color:var(--grey)">Unlimited roasts</span></li>
       </ul>
-      <button class="btn-plan" onclick="openModal('signup')">Commencer gratuitement</button>
+      <button class="btn-plan" onclick="openModal('signup')">Start for free</button>
     </div>
     <div class="plan plan-featured">
-      <div class="plan-badge">Recommandé</div>
+      <div class="plan-badge">Recommended</div>
       <div class="plan-name">Ultimate</div>
       <div class="plan-price">6<span>€</span></div>
-      <div class="plan-period">par mois · sans engagement</div>
+      <div class="plan-period">per month · cancel anytime</div>
       <ul class="plan-features">
-        <li><span class="feat-icon ok">✓</span> Roasts <strong>illimités</strong></li>
-        <li><span class="feat-icon ok">✓</span> Score sur 100</li>
-        <li><span class="feat-icon ok">✓</span> Points positifs &amp; négatifs</li>
-        <li><span class="feat-icon ok">✓</span> Conseils d'amélioration</li>
-        <li><span class="feat-icon ok">✓</span> Historique de vos roasts</li>
+        <li><span class="feat-icon ok">✓</span> <strong>Unlimited</strong> roasts</li>
+        <li><span class="feat-icon ok">✓</span> Score out of 100</li>
+        <li><span class="feat-icon ok">✓</span> Strengths &amp; failures</li>
+        <li><span class="feat-icon ok">✓</span> Actionable fixes</li>
+        <li><span class="feat-icon ok">✓</span> Roast history</li>
       </ul>
-      <button class="btn-plan btn-plan-red" onclick="openModal('signup')">Passer à Ultimate</button>
+      <button class="btn-plan btn-plan-red" onclick="openModal('signup')">Upgrade to Ultimate</button>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="footer-logo">RoastMine</div>
-  <div class="footer-copy">© 2025 RoastMine · Tous droits réservés</div>
+  <div class="footer-copy">© 2025 RoastMine · All rights reserved</div>
 </footer>
 
 <!-- MODAL AUTH -->
@@ -278,32 +293,32 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-title">RoastMine</div>
-    <p class="modal-sub">Créez un compte pour accéder à votre roast gratuit.</p>
+    <p class="modal-sub">Create an account to access your free roast.</p>
     <div class="modal-tabs">
-      <button class="modal-tab active" id="tabLogin" onclick="switchTab('login')">Se connecter</button>
-      <button class="modal-tab" id="tabSignup" onclick="switchTab('signup')">Créer un compte</button>
+      <button class="modal-tab active" id="tabLogin" onclick="switchTab('login')">Log in</button>
+      <button class="modal-tab" id="tabSignup" onclick="switchTab('signup')">Create account</button>
     </div>
     <div id="formLogin">
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="loginEmail" placeholder="vous@exemple.com"/>
+        <input class="form-input" type="email" id="loginEmail" placeholder="you@example.com"/>
       </div>
       <div class="form-group">
-        <label class="form-label">Mot de passe</label>
+        <label class="form-label">Password</label>
         <input class="form-input" type="password" id="loginPwd" placeholder="••••••••"/>
       </div>
-      <button class="btn-form" onclick="doLogin()">Se connecter →</button>
+      <button class="btn-form" onclick="doLogin()">Log in →</button>
     </div>
     <div id="formSignup" style="display:none">
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="signupEmail" placeholder="vous@exemple.com"/>
+        <input class="form-input" type="email" id="signupEmail" placeholder="you@example.com"/>
       </div>
       <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <input class="form-input" type="password" id="signupPwd" placeholder="8 caractères minimum"/>
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="signupPwd" placeholder="8 characters minimum"/>
       </div>
-      <button class="btn-form" onclick="doSignup()">Créer mon compte →</button>
+      <button class="btn-form" onclick="doSignup()">Create my account →</button>
     </div>
     <div class="modal-msg" id="modalMsg"></div>
   </div>
@@ -312,7 +327,7 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
 <script>
 // ========== CONFIG ==========
 const SUPABASE_URL = 'https://kovzlayghskvdijragyb.supabase.co';
-const SUPABASE_KEY = 'VOTRE_SUPABASE_ANON_KEY';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
 // ============================
 
 const { createClient } = supabase;
@@ -326,6 +341,26 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
       '<button class="btn-nav-cta" onclick="location.href=\'roast.html\'">Mon espace →</button>';
   }
 })();
+
+const roastForm = document.getElementById('roastForm');
+if (roastForm) {
+  roastForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const input = document.getElementById('siteUrl');
+    const error = document.getElementById('urlError');
+    const rawUrl = input.value.trim();
+
+    try {
+      const parsed = new URL(rawUrl);
+      if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('Invalid protocol');
+      error.style.display = 'none';
+      window.location.href = `roast.html?url=${encodeURIComponent(parsed.href)}`;
+    } catch (err) {
+      error.style.display = 'block';
+      input.focus();
+    }
+  });
+}
 
 function openModal(tab){ document.getElementById('authModal').classList.add('active'); switchTab(tab); }
 function closeModal(){ document.getElementById('authModal').classList.remove('active'); clearMsg(); }
@@ -345,7 +380,7 @@ function clearMsg(){ document.getElementById('modalMsg').style.display='none'; }
 async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pwd=document.getElementById('loginPwd').value;
-  if(!email||!pwd){ showMsg('Remplissez tous les champs.'); return; }
+  if(!email||!pwd){ showMsg('Fill in every field.'); return; }
   const {error}=await sb.auth.signInWithPassword({email,password:pwd});
   if(error){ showMsg(error.message); return; }
   window.location.href='roast.html';
@@ -354,11 +389,11 @@ async function doLogin(){
 async function doSignup(){
   const email=document.getElementById('signupEmail').value.trim();
   const pwd=document.getElementById('signupPwd').value;
-  if(!email||!pwd){ showMsg('Remplissez tous les champs.'); return; }
-  if(pwd.length<8){ showMsg('Mot de passe : 8 caractères minimum.'); return; }
+  if(!email||!pwd){ showMsg('Fill in every field.'); return; }
+  if(pwd.length<8){ showMsg('Password: 8 characters minimum.'); return; }
   const {error}=await sb.auth.signUp({email,password:pwd});
   if(error){ showMsg(error.message); return; }
-  showMsg('Compte créé ! Redirection...','success');
+  showMsg('Account created! Redirecting...','success');
   setTimeout(()=>{ window.location.href='roast.html'; },1800);
 }
 </script>
