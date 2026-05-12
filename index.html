@@ -6,7 +6,6 @@
 <title>RoastMine — Your business might be bad.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --black:#090909;--charcoal:#111;--border:#222;--border2:#2e2e2e;
@@ -116,28 +115,6 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
 .footer-logo{font-family:var(--font-d);font-size:16px;color:var(--white);}
 .footer-copy{font-size:11px;color:var(--grey);letter-spacing:.05em;}
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.modal-overlay.active{display:flex;}
-.modal{background:var(--charcoal);border:1px solid var(--border2);width:100%;max-width:440px;padding:48px;position:relative;}
-.modal-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:20px;line-height:1;}
-.modal-close:hover{color:var(--white);}
-.modal-title{font-family:var(--font-d);font-size:28px;color:var(--white);margin-bottom:8px;}
-.modal-sub{font-size:12px;color:var(--muted);margin-bottom:32px;line-height:1.7;}
-.modal-tabs{display:flex;margin-bottom:32px;border-bottom:1px solid var(--border);}
-.modal-tab{flex:1;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;color:var(--muted);padding:12px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
-.modal-tab.active{color:var(--white);border-bottom-color:var(--red);}
-.form-group{margin-bottom:20px;}
-.form-label{display:block;font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.form-input{width:100%;background:var(--black);border:1px solid var(--border2);color:var(--cream);font-family:var(--font-m);font-size:13px;padding:12px 14px;outline:none;transition:border-color .15s;}
-.form-input:focus{border-color:var(--red);}
-.form-input::placeholder{color:var(--grey);}
-.btn-form{width:100%;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:#fff;border:none;padding:14px;margin-top:8px;transition:background .15s;}
-.btn-form:hover{background:var(--red2);}
-.modal-msg{font-size:12px;text-align:center;margin-top:16px;padding:10px;display:none;}
-.modal-msg.error{background:rgba(191,44,31,0.15);color:var(--red2);}
-.modal-msg.success{background:rgba(76,175,110,0.1);color:#4caf6e;}
-
 @media(max-width:768px){
   nav{padding:16px 20px;}
   .hero{padding:120px 20px 80px;}
@@ -152,7 +129,6 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
   .pricing-grid{grid-template-columns:1fr;}
   .plan{margin-bottom:-1px;}
   footer{flex-direction:column;gap:12px;text-align:center;padding:24px 20px;}
-  .modal{margin:16px;padding:28px 20px;}
   .hero-actions{flex-direction:column;align-items:flex-start;}
   .url-roast-form{flex-direction:column;align-items:stretch;}
   .url-roast-input{min-width:0;width:100%;}
@@ -165,8 +141,8 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
 <nav>
   <div class="logo">RoastMine <span class="logo-flame">✶</span></div>
   <div class="nav-r" id="navRight">
-    <button class="btn-nav" onclick="openModal('login')">Log in</button>
-    <button class="btn-nav-cta" onclick="openModal('signup')">Free roast</button>
+    <button class="btn-nav" onclick="focusUrlInput()">Try it now</button>
+    <button class="btn-nav-cta" onclick="focusUrlInput()">Free roast</button>
   </div>
 </nav>
 
@@ -264,7 +240,7 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
         <li><span class="feat-icon ok">✓</span> Actionable fixes</li>
         <li><span class="feat-icon" style="color:var(--grey)">✗</span> <span style="color:var(--grey)">Unlimited roasts</span></li>
       </ul>
-      <button class="btn-plan" onclick="openModal('signup')">Start for free</button>
+      <button class="btn-plan" onclick="focusUrlInput()">Roast my site</button>
     </div>
     <div class="plan plan-featured">
       <div class="plan-badge">Recommended</div>
@@ -278,7 +254,7 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
         <li><span class="feat-icon ok">✓</span> Actionable fixes</li>
         <li><span class="feat-icon ok">✓</span> Roast history</li>
       </ul>
-      <button class="btn-plan btn-plan-red" onclick="openModal('signup')">Upgrade to Ultimate</button>
+      <button class="btn-plan btn-plan-red" onclick="focusUrlInput()">Try a free roast</button>
     </div>
   </div>
 </section>
@@ -288,59 +264,13 @@ footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-i
   <div class="footer-copy">© 2025 RoastMine · All rights reserved</div>
 </footer>
 
-<!-- MODAL AUTH -->
-<div class="modal-overlay" id="authModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title">RoastMine</div>
-    <p class="modal-sub">Create an account to access your free roast.</p>
-    <div class="modal-tabs">
-      <button class="modal-tab active" id="tabLogin" onclick="switchTab('login')">Log in</button>
-      <button class="modal-tab" id="tabSignup" onclick="switchTab('signup')">Create account</button>
-    </div>
-    <div id="formLogin">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="loginEmail" placeholder="you@example.com"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" type="password" id="loginPwd" placeholder="••••••••"/>
-      </div>
-      <button class="btn-form" onclick="doLogin()">Log in →</button>
-    </div>
-    <div id="formSignup" style="display:none">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="signupEmail" placeholder="you@example.com"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" type="password" id="signupPwd" placeholder="8 characters minimum"/>
-      </div>
-      <button class="btn-form" onclick="doSignup()">Create my account →</button>
-    </div>
-    <div class="modal-msg" id="modalMsg"></div>
-  </div>
-</div>
-
 <script>
-// ========== CONFIG ==========
-const SUPABASE_URL = 'https://kovzlayghskvdijragyb.supabase.co';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
-// ============================
-
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-(async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    document.getElementById('navRight').innerHTML =
-      '<span class="btn-nav" style="color:var(--light)">' + session.user.email + '</span>' +
-      '<button class="btn-nav-cta" onclick="location.href=\'roast.html\'">Mon espace →</button>';
-  }
-})();
+function focusUrlInput(){
+  const input = document.getElementById('siteUrl');
+  if (!input) return;
+  input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => input.focus(), 350);
+}
 
 const roastForm = document.getElementById('roastForm');
 if (roastForm) {
@@ -360,41 +290,6 @@ if (roastForm) {
       input.focus();
     }
   });
-}
-
-function openModal(tab){ document.getElementById('authModal').classList.add('active'); switchTab(tab); }
-function closeModal(){ document.getElementById('authModal').classList.remove('active'); clearMsg(); }
-document.getElementById('authModal').addEventListener('click', e => { if(e.target.id==='authModal') closeModal(); });
-
-function switchTab(tab){
-  document.getElementById('formLogin').style.display  = tab==='login'  ? 'block':'none';
-  document.getElementById('formSignup').style.display = tab==='signup' ? 'block':'none';
-  document.getElementById('tabLogin').classList.toggle('active', tab==='login');
-  document.getElementById('tabSignup').classList.toggle('active', tab==='signup');
-  clearMsg();
-}
-
-function showMsg(t,type='error'){ const e=document.getElementById('modalMsg'); e.textContent=t; e.className='modal-msg '+type; e.style.display='block'; }
-function clearMsg(){ document.getElementById('modalMsg').style.display='none'; }
-
-async function doLogin(){
-  const email=document.getElementById('loginEmail').value.trim();
-  const pwd=document.getElementById('loginPwd').value;
-  if(!email||!pwd){ showMsg('Fill in every field.'); return; }
-  const {error}=await sb.auth.signInWithPassword({email,password:pwd});
-  if(error){ showMsg(error.message); return; }
-  window.location.href='roast.html';
-}
-
-async function doSignup(){
-  const email=document.getElementById('signupEmail').value.trim();
-  const pwd=document.getElementById('signupPwd').value;
-  if(!email||!pwd){ showMsg('Fill in every field.'); return; }
-  if(pwd.length<8){ showMsg('Password: 8 characters minimum.'); return; }
-  const {error}=await sb.auth.signUp({email,password:pwd});
-  if(error){ showMsg(error.message); return; }
-  showMsg('Account created! Redirecting...','success');
-  setTimeout(()=>{ window.location.href='roast.html'; },1800);
 }
 </script>
 </body>
