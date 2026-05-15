@@ -8,8 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#0b0c0f;--panel:#12141a;--line:#232733;--line-2:#323847;--text:#f5f7fb;--muted:#b5bdcc;--sub:#8d96a9;--ok:#bfc6d6;--red:#ff5b66;--red-soft:#ff9aa1;--orange:#ff9a61;--green:#98d6bb;--score-color:var(--red);--font:'Inter',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
-*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%}body{min-height:100dvh;background:radial-gradient(circle at top,#131825 0%,var(--bg) 60%);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.65}a{color:inherit;text-decoration:none}
-.page{min-height:100dvh;display:flex;flex-direction:column}
+*{margin:0;padding:0;box-sizing:border-box}body{min-height:100vh;background:radial-gradient(circle at top,#131825 0%,var(--bg) 60%);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.65}a{color:inherit;text-decoration:none}
 nav{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:18px 48px;border-bottom:1px solid var(--line);background:rgba(11,12,15,.92);backdrop-filter:blur(6px)}
 .logo{font-weight:600}.nav-link{font:600 11px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}.nav-link:hover{color:var(--text)}
 main{flex:1;width:min(980px,calc(100% - 40px));margin:0 auto;padding:30px 0 60px}.loading{min-height:calc(100dvh - 150px);display:grid;place-items:center;text-align:center}.loading-card,.key-card{width:min(680px,100%);border:1px solid var(--line);background:var(--panel);padding:34px 28px;box-shadow:0 10px 30px rgba(0,0,0,.22)}
@@ -18,15 +17,15 @@ main{flex:1;width:min(980px,calc(100% - 40px));margin:0 auto;padding:30px 0 60px
 .key-form{display:grid;gap:12px;margin-top:20px}.key-row{display:flex;border:1px solid var(--line-2)}.key-row input{flex:1;background:transparent;border:none;outline:none;color:var(--text);padding:14px 16px;font:500 12px var(--mono)}.key-row button{border:none;border-left:1px solid var(--line-2);background:var(--text);color:#0a0a0b;padding:14px 16px;font:600 11px var(--mono);text-transform:uppercase}
 .key-help{font:500 11px var(--mono);color:var(--sub)}
 .dots::after{content:'';animation:dots 1.3s steps(4,end) infinite}@keyframes dots{0%{content:'';}25%{content:'.';}50%{content:'..';}75%,100%{content:'...';}}
-.result{display:none}.result.active{display:block}.result-box{border:1px solid var(--line-2);background:var(--panel);padding:22px 24px;margin-bottom:28px;box-shadow:0 10px 30px rgba(0,0,0,.22)}.result-box-title{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}.result-url{font:500 13px var(--mono);color:var(--muted);word-break:break-all}
-.score-block{text-align:center;margin:0 auto 32px}.score-label{font:600 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--red-soft);margin-bottom:8px}.score-value{font-size:clamp(58px,12vw,104px);line-height:.92;letter-spacing:-.02em}.score-value #globalScore{color:var(--score-color);font-weight:700}.score-value span{font:500 18px var(--mono);color:var(--sub)}.score-line{font-size:16px;color:var(--text);margin-top:15px}
-.rule{height:1px;background:var(--line-2);margin:26px 0}.section-title{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;color:var(--red-soft)}.verdict-text{font-size:16px;color:var(--text);line-height:1.8;white-space:pre-line}
+.result{display:none}.result.active{display:block}.result-box{border:1px solid var(--line-2);background:var(--panel);padding:22px 24px;margin-bottom:46px;box-shadow:0 10px 30px rgba(0,0,0,.22)}.result-box-title{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}.result-url{font:500 13px var(--mono);color:var(--muted);word-break:break-all}
+.score-block{text-align:center;margin:0 auto 42px}.score-label{font:600 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--red-soft);margin-bottom:8px}.score-value{font-size:clamp(58px,12vw,104px);line-height:.92;letter-spacing:-.02em}.score-value #globalScore{color:var(--score-color);font-weight:700}.score-value span{font:500 18px var(--mono);color:var(--sub);letter-spacing:0}.score-line{font-size:16px;color:var(--text);margin-top:15px}
+.rule{height:1px;background:var(--line-2);margin:38px 0}.section-title{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;margin-bottom:16px;color:var(--red-soft)}.verdict-text{font-size:16px;color:var(--text);line-height:1.85;white-space:pre-line}
 .breakdown{display:grid;gap:11px}.breakdown-row{display:grid;grid-template-columns:140px 64px 1fr;gap:12px;align-items:start}.breakdown-name{font-weight:600}.breakdown-score{white-space:nowrap;color:var(--ok)}.breakdown-comment,.bullet-list{color:var(--muted)}
 .bullet-list{list-style:none;display:grid;gap:10px}.bullet-list li{padding-left:14px;position:relative}.bullet-list li::before{content:'—';position:absolute;left:0;top:0;color:var(--red-soft)}
 .share-line-box{border:1px solid var(--line-2);background:var(--panel);padding:24px;margin-bottom:24px;text-align:center}.share-line-text{font-size:20px;line-height:1.55;color:var(--text)}
 .share-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}.btn{border:1px solid var(--line-2);background:transparent;color:var(--text);padding:13px 24px;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;transition:border-color .18s ease,background .18s ease,color .18s ease}.btn:hover{border-color:var(--red-soft)}.btn-primary{background:var(--text);color:#0a0a0b;border-color:var(--text)}.btn-primary:hover{background:var(--red-soft);border-color:var(--red-soft);color:#13090a}.copy-status{display:none;margin-top:16px;color:var(--sub);font:500 11px var(--mono);text-align:center}
-.error{margin-top:14px;color:#ffd2d6;font:500 11px var(--mono)}
-@media(max-width:740px){nav{padding:14px 20px}main{width:calc(100% - 24px);padding:16px 0 34px}.key-row{flex-direction:column}.key-row button{border-left:none;border-top:1px solid var(--line-2)}.breakdown-row{grid-template-columns:1fr;gap:2px;border-bottom:1px solid var(--line);padding-bottom:12px}.breakdown-row:last-child{border-bottom:none;padding-bottom:0}.share-line-text{font-size:17px}}
+.empty-url{border:1px solid var(--line);background:var(--panel);padding:44px;margin-top:34px;color:var(--muted)}.empty-url h1{font-size:clamp(40px,7vw,68px);margin-bottom:18px}.empty-url a{color:var(--text);border-bottom:1px solid var(--line-2)}
+@media(max-width:720px){nav{padding:16px 20px}main{padding:44px 0 68px}.breakdown-row{grid-template-columns:1fr;gap:2px;border-bottom:1px solid var(--line);padding-bottom:12px}.breakdown-row:last-child{border-bottom:none;padding-bottom:0}.share-line-text{font-size:17px}}
 </style>
 </head>
 <body>
@@ -70,10 +69,86 @@ const resultScreen = document.getElementById('resultScreen');
 function scoreColor(score){if(score<50)return 'var(--red)';if(score<=75)return 'var(--orange)';return 'var(--green)';}
 function normalizeUrl(url){if(!url)return null;try{const p=new URL(url);if(!['http:','https:'].includes(p.protocol))return null;return p.href;}catch{return null;}}
 
-function parseRoast(json){
-  const required=['score','scoreLine','verdict','breakdown','problems','fixes','shareLine'];
-  for(const k of required){if(!(k in json)) throw new Error('Invalid AI response format');}
-  return json;
+const scoreLines = [
+  'You did not give visitors a reason to act',
+  'The page looks done but does not sell',
+  'Strong visuals, weak message, low conversion pressure',
+  'Readable layout, forgettable offer'
+];
+
+const mainProblems = [
+  'No clear value proposition in first 3 seconds',
+  'Weak CTA visibility',
+  'No emotional hook',
+  'No trust signals',
+  'No differentiation',
+  'The hero section makes visitors work too hard',
+  'The page does not create urgency',
+  'The offer sounds interchangeable'
+];
+
+const quickFixes = [
+  'Rewrite hero section to state clear outcome',
+  'Make CTA dominant and repeated',
+  'Add social proof above fold',
+  'Remove non-essential sections',
+  'Focus page on single action',
+  'Replace feature claims with buyer outcomes',
+  'Add one proof point beside the first CTA',
+  'Cut any headline a competitor could reuse'
+];
+
+const shareLines = [
+  'Your site looks complete, but it gives buyers zero urgency to act.',
+  'Design is not your issue; weak persuasion is.',
+  'Clean page, weak offer, predictable bounce.',
+  'This site is usable, but it does not make anyone want to buy.'
+];
+
+function hashUrl(url) {
+  return [...url].reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0);
+}
+
+function pick(items, seed, offset = 0) {
+  return items[Math.abs(seed + offset) % items.length];
+}
+
+function rotatePick(items, seed, count) {
+  const start = Math.abs(seed) % items.length;
+  return Array.from({ length: count }, (_, index) => items[(start + index) % items.length]);
+}
+
+function normalizeUrl(url) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+    return parsed.href;
+  } catch (error) {
+    return null;
+  }
+}
+
+function generateRoastResult(url) {
+  const prompt = ROAST_RESULT_PROMPT.replace('{url}', url);
+  const seed = hashUrl(prompt);
+  const score = Math.max(24, Math.min(88, 50 + (seed % 39)));
+  const categories = ['Design', 'Copywriting', 'Conversion', 'UX', 'Trust'];
+
+  return {
+    url,
+    score,
+    scoreLine: pick(scoreLines, seed),
+    verdict: pick(verdicts, seed).join('\n'),
+    breakdown: categories.map((name, index) => ({
+      name,
+      score: Math.max(3, Math.min(8, 4 + Math.abs((seed + index * 7) % 5))),
+      comment: pick(breakdownTemplates[name], seed, index)
+    })),
+    problems: rotatePick(mainProblems, seed, 5),
+    fixes: rotatePick(quickFixes, seed + 3, 5),
+    shareLine: pick(shareLines, seed)
+  };
 }
 
 async function generateRoastWithAI(url, apiKey){
