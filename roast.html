@@ -11,8 +11,11 @@
 *{margin:0;padding:0;box-sizing:border-box}body{min-height:100vh;background:radial-gradient(circle at top,#131825 0%,var(--bg) 60%);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.65}a{color:inherit;text-decoration:none}
 nav{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:18px 48px;border-bottom:1px solid var(--line);background:rgba(11,12,15,.92);backdrop-filter:blur(6px)}
 .logo{font-weight:600}.nav-link{font:600 11px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}.nav-link:hover{color:var(--text)}
-main{width:min(860px,calc(100% - 40px));margin:0 auto;padding:64px 0 88px}.loading{min-height:calc(100vh - 72px);display:grid;place-items:center;text-align:center}.loading-card{width:min(620px,100%);border:1px solid var(--line);background:var(--panel);padding:58px 42px}.loader-mark{width:56px;height:56px;margin:0 auto 28px;border:1px solid var(--line-2);display:grid;place-items:center;font:600 24px var(--mono)}
-.loading h1{font-size:clamp(34px,5.4vw,58px);margin-bottom:14px;letter-spacing:-.01em}.loading p{color:var(--muted)}
+main{flex:1;width:min(980px,calc(100% - 40px));margin:0 auto;padding:30px 0 60px}.loading{min-height:calc(100dvh - 150px);display:grid;place-items:center;text-align:center}.loading-card,.key-card{width:min(680px,100%);border:1px solid var(--line);background:var(--panel);padding:34px 28px;box-shadow:0 10px 30px rgba(0,0,0,.22)}
+.loader-mark{width:56px;height:56px;margin:0 auto 20px;border:1px solid var(--line-2);display:grid;place-items:center;font:600 24px var(--mono)}
+.loading h1,.key-card h1{font-size:clamp(28px,4.6vw,48px);margin-bottom:10px;letter-spacing:-.01em}.loading p,.key-card p{color:var(--muted)}
+.key-form{display:grid;gap:12px;margin-top:20px}.key-row{display:flex;border:1px solid var(--line-2)}.key-row input{flex:1;background:transparent;border:none;outline:none;color:var(--text);padding:14px 16px;font:500 12px var(--mono)}.key-row button{border:none;border-left:1px solid var(--line-2);background:var(--text);color:#0a0a0b;padding:14px 16px;font:600 11px var(--mono);text-transform:uppercase}
+.key-help{font:500 11px var(--mono);color:var(--sub)}
 .dots::after{content:'';animation:dots 1.3s steps(4,end) infinite}@keyframes dots{0%{content:'';}25%{content:'.';}50%{content:'..';}75%,100%{content:'...';}}
 .result{display:none}.result.active{display:block}.result-box{border:1px solid var(--line-2);background:var(--panel);padding:22px 24px;margin-bottom:46px;box-shadow:0 10px 30px rgba(0,0,0,.22)}.result-box-title{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}.result-url{font:500 13px var(--mono);color:var(--muted);word-break:break-all}
 .score-block{text-align:center;margin:0 auto 42px}.score-label{font:600 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--red-soft);margin-bottom:8px}.score-value{font-size:clamp(58px,12vw,104px);line-height:.92;letter-spacing:-.02em}.score-value #globalScore{color:var(--score-color);font-weight:700}.score-value span{font:500 18px var(--mono);color:var(--sub);letter-spacing:0}.score-line{font-size:16px;color:var(--text);margin-top:15px}
@@ -26,170 +29,45 @@ main{width:min(860px,calc(100% - 40px));margin:0 auto;padding:64px 0 88px}.loadi
 </style>
 </head>
 <body>
-<nav>
-  <a class="logo" href="index.html">RoastMine</a>
-  <a class="nav-link" href="index.html">New roast</a>
-</nav>
-
+<div class="page">
+<nav><a class="logo" href="index.html">RoastMine</a><a class="nav-link" href="index.html">New roast</a></nav>
 <main>
-  <section class="loading" id="loadingScreen" aria-live="polite">
-    <div class="loading-card">
-      <div class="loader-mark">✶</div>
-      <h1>Roast Result</h1>
-      <p><span class="dots">Analyzing your website</span></p>
+  <section class="loading" id="keyScreen">
+    <div class="key-card">
+      <h1>Connect Real AI</h1>
+      <p>Enter an OpenAI API key to generate a real model-based roast for this URL.</p>
+      <form class="key-form" id="keyForm">
+        <div class="key-row"><input id="apiKey" type="password" placeholder="sk-..." required><button type="submit">Run real audit</button></div>
+      </form>
+      <div class="key-help">Key is kept in your browser session only.</div>
+      <div class="error" id="keyError" style="display:none;"></div>
     </div>
   </section>
 
+  <section class="loading" id="loadingScreen" aria-live="polite" style="display:none;">
+    <div class="loading-card"><div class="loader-mark">✶</div><h1>Roast Result</h1><p><span class="dots">Analyzing your website</span></p></div>
+  </section>
+
   <section class="result" id="resultScreen">
-    <header class="result-box">
-      <div class="result-box-title">Roast Result</div>
-      <div class="result-url" id="displayUrl"></div>
-    </header>
-
-    <section class="score-block" aria-label="Website score">
-      <div class="score-label">Score</div>
-      <div class="score-value"><span id="globalScore">0</span> <span>/ 100</span></div>
-      <div class="score-line" id="scoreLine"></div>
-    </section>
-
-    <div class="rule"></div>
-
-    <section>
-      <h2 class="section-title">Verdict</h2>
-      <p class="verdict-text" id="verdictText"></p>
-    </section>
-
-    <div class="rule"></div>
-
-    <section>
-      <h2 class="section-title">Breakdown</h2>
-      <div class="breakdown" id="breakdownList"></div>
-    </section>
-
-    <div class="rule"></div>
-
-    <section>
-      <h2 class="section-title">Main Problems</h2>
-      <ul class="bullet-list" id="problemsList"></ul>
-    </section>
-
-    <div class="rule"></div>
-
-    <section>
-      <h2 class="section-title">Quick Fixes</h2>
-      <ul class="bullet-list" id="fixesList"></ul>
-    </section>
-
-    <div class="rule"></div>
-
-    <section>
-      <h2 class="section-title">Share Line</h2>
-      <div class="share-line-box">
-        <p class="share-line-text" id="shareLine"></p>
-      </div>
-      <div class="share-actions">
-        <button class="btn btn-primary" id="copyButton" type="button">Copy</button>
-        <a class="btn" id="shareX" target="_blank" rel="noopener">Share</a>
-      </div>
-      <div class="copy-status" id="copyStatus">Copied.</div>
-    </section>
-
-    <div class="rule"></div>
+    <header class="result-box"><div class="result-box-title">Roast Result</div><div class="result-url" id="displayUrl"></div></header>
+    <section class="score-block" aria-label="Website score"><div class="score-label">Score</div><div class="score-value"><span id="globalScore">0</span> <span>/ 100</span></div><div class="score-line" id="scoreLine"></div></section>
+    <div class="rule"></div><section><h2 class="section-title">Verdict</h2><p class="verdict-text" id="verdictText"></p></section>
+    <div class="rule"></div><section><h2 class="section-title">Breakdown</h2><div class="breakdown" id="breakdownList"></div></section>
+    <div class="rule"></div><section><h2 class="section-title">Main Problems</h2><ul class="bullet-list" id="problemsList"></ul></section>
+    <div class="rule"></div><section><h2 class="section-title">Quick Fixes</h2><ul class="bullet-list" id="fixesList"></ul></section>
+    <div class="rule"></div><section><h2 class="section-title">Share Line</h2><div class="share-line-box"><p class="share-line-text" id="shareLine"></p></div><div class="share-actions"><button class="btn btn-primary" id="copyButton" type="button">Copy</button><a class="btn" id="shareX" target="_blank" rel="noopener">Share</a></div><div class="copy-status" id="copyStatus">Copied.</div></section>
   </section>
 </main>
-
+</div>
 <script>
-const ROAST_RESULT_PROMPT = `You are RoastMine AI.
-
-Analyze the submitted website and return the roast in this exact user-facing format:
-
-ROAST RESULT
-{url}
-
-SCORE
-{score} / 100
-"{one sharp score line}"
-
-VERDICT
-3 short sentences. Brutal, useful, conversion-focused.
-
-BREAKDOWN
-Design        {score}/10  → {one sentence}
-Copywriting   {score}/10  → {one sentence}
-Conversion    {score}/10  → {one sentence}
-UX            {score}/10  → {one sentence}
-Trust         {score}/10  → {one sentence}
-
-MAIN PROBLEMS
-5 bullets only. No fluff.
-
-QUICK FIXES
-5 bullets only. Extremely actionable.
-
-SHARE LINE
-"{one viral brutal sentence}"
-
-Rules:
-- Be direct, concise, and slightly aggressive without being insulting.
-- No generic advice.
-- Every sentence must feel like a real product critique.
-- Focus on conversion, clarity, trust, UX, and copywriting.`;
-
 const params = new URLSearchParams(window.location.search);
 const submittedUrl = params.get('url');
+const keyScreen = document.getElementById('keyScreen');
 const loadingScreen = document.getElementById('loadingScreen');
 const resultScreen = document.getElementById('resultScreen');
 
-const breakdownTemplates = {
-  Design: [
-    'Clean, but lacks hierarchy and focus.',
-    'Polished enough to pass, not sharp enough to guide attention.',
-    'Looks composed, but the eye has no obvious place to land.'
-  ],
-  Copywriting: [
-    'Describes features, not value.',
-    'Talks like a product sheet when it needs to sound like a buyer outcome.',
-    'Too much explanation, not enough reason to care.'
-  ],
-  Conversion: [
-    'No strong CTA or urgency.',
-    'The page gives visitors too many chances to do nothing.',
-    'The next step exists, but it does not feel important.'
-  ],
-  UX: [
-    'Usable but directionless.',
-    'The path is technically clear, emotionally weak.',
-    'Nothing is broken, but nothing pushes the user forward either.'
-  ],
-  Trust: [
-    'No proof or credibility signals.',
-    'The claim is bigger than the evidence supporting it.',
-    'Trust arrives too late for a skeptical visitor.'
-  ]
-};
-
-const verdicts = [
-  [
-    'Your website is not confusing — it is just forgettable.',
-    'Nothing creates urgency or attention in the first seconds.',
-    'It looks complete, but it does not perform.'
-  ],
-  [
-    'Your website has the shape of a landing page and the persuasion of a waiting room poster.',
-    'The offer is present, but the reason to act is weak.',
-    'People can understand it and still feel absolutely nothing.'
-  ],
-  [
-    'Your website is clean enough to avoid embarrassment, which is not the same as converting.',
-    'The first screen fails to create a sharp reason to stay.',
-    'It explains the product, then forgets to sell the outcome.'
-  ],
-  [
-    'Your website looks like it was designed by someone who wanted approval, not action.',
-    'The page is tidy, but tidy does not create demand.',
-    'The funnel needs pressure, proof, and a clearer promise.'
-  ]
-];
+function scoreColor(score){if(score<50)return 'var(--red)';if(score<=75)return 'var(--orange)';return 'var(--green)';}
+function normalizeUrl(url){if(!url)return null;try{const p=new URL(url);if(!['http:','https:'].includes(p.protocol))return null;return p.href;}catch{return null;}}
 
 const scoreLines = [
   'You did not give visitors a reason to act',
@@ -273,93 +151,36 @@ function generateRoastResult(url) {
   };
 }
 
-function scoreColor(score) {
-  if (score < 50) return 'var(--red)';
-  if (score <= 75) return 'var(--orange)';
-  return 'var(--green)';
-}
-
-function renderEmptyState() {
-  loadingScreen.style.display = 'none';
-  resultScreen.classList.add('active');
-  resultScreen.innerHTML = `
-    <div class="empty-url">
-      <h1>Roast Result</h1>
-      <p>No URL was provided. Go back to <a href="index.html">RoastMine</a>, paste a website URL, and let the AI be professionally rude.</p>
-    </div>
-  `;
-}
-
-function renderBullets(elementId, items) {
-  const list = document.getElementById(elementId);
-  list.innerHTML = '';
-  items.forEach(item => {
-    const li = document.createElement('li');
-    const span = document.createElement('span');
-    span.textContent = item;
-    li.appendChild(span);
-    list.appendChild(li);
+async function generateRoastWithAI(url, apiKey){
+  const system = 'You are RoastMine AI, a conversion auditor. Return strict JSON only.';
+  const user = `Audit this website URL: ${url}. Return JSON with keys: score (0-100 number), scoreLine (string), verdict (3 concise sentences as one string with \\n between sentences), breakdown (array of 5 items: name one of Design/Copywriting/Conversion/UX/Trust, score 0-10, comment), problems (5 bullets), fixes (5 bullets), shareLine (one direct sentence). Tone: friendly but sharp, practical, conversion-focused.`;
+  const res = await fetch('https://api.openai.com/v1/responses', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},
+    body: JSON.stringify({model:'gpt-4.1-mini',input:[{role:'system',content:system},{role:'user',content:user}],text:{format:{type:'json_object'}}})
   });
+  if(!res.ok){const t=await res.text();throw new Error(`API error ${res.status}: ${t.slice(0,180)}`);}
+  const data=await res.json();
+  const text=data.output_text || data.output?.[0]?.content?.[0]?.text;
+  return parseRoast(JSON.parse(text));
 }
 
-function renderResult(data) {
-  document.documentElement.style.setProperty('--score-color', scoreColor(data.score));
-  document.getElementById('displayUrl').textContent = data.url;
-  document.getElementById('globalScore').textContent = data.score;
-  document.getElementById('scoreLine').textContent = `"${data.scoreLine}"`;
-  document.getElementById('verdictText').textContent = data.verdict;
-  document.getElementById('shareLine').textContent = `"${data.shareLine}"`;
-
-  const breakdown = document.getElementById('breakdownList');
-  breakdown.innerHTML = '';
-  data.breakdown.forEach(item => {
-    const row = document.createElement('div');
-    row.className = 'breakdown-row';
-    row.innerHTML = `
-      <div class="breakdown-name"></div>
-      <div class="breakdown-score"></div>
-      <div class="breakdown-comment"></div>
-    `;
-    row.querySelector('.breakdown-name').textContent = item.name;
-    row.querySelector('.breakdown-score').textContent = `${item.score}/10`;
-    row.querySelector('.breakdown-comment').textContent = `→ ${item.comment}`;
-    breakdown.appendChild(row);
-  });
-
-  renderBullets('problemsList', data.problems);
-  renderBullets('fixesList', data.fixes);
-
-  const share = data.shareLine;
-  document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(share)}`;
-  document.getElementById('copyButton').addEventListener('click', async () => {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(share);
-    } else {
-      const textarea = document.createElement('textarea');
-      textarea.value = share;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      textarea.remove();
-    }
-    const status = document.getElementById('copyStatus');
-    status.style.display = 'block';
-    setTimeout(() => { status.style.display = 'none'; }, 2400);
-  });
-
-  loadingScreen.style.display = 'none';
-  resultScreen.classList.add('active');
-}
+function renderBullets(elementId, items){const list=document.getElementById(elementId);list.innerHTML='';items.forEach(item=>{const li=document.createElement('li');li.textContent=item;list.appendChild(li);});}
+function renderResult(data,url){document.documentElement.style.setProperty('--score-color',scoreColor(data.score));document.getElementById('displayUrl').textContent=url;document.getElementById('globalScore').textContent=data.score;document.getElementById('scoreLine').textContent=`"${data.scoreLine}"`;document.getElementById('verdictText').textContent=data.verdict;document.getElementById('shareLine').textContent=`"${data.shareLine}"`;const breakdown=document.getElementById('breakdownList');breakdown.innerHTML='';data.breakdown.forEach(item=>{const row=document.createElement('div');row.className='breakdown-row';row.innerHTML='<div class="breakdown-name"></div><div class="breakdown-score"></div><div class="breakdown-comment"></div>';row.querySelector('.breakdown-name').textContent=item.name;row.querySelector('.breakdown-score').textContent=`${item.score}/10`;row.querySelector('.breakdown-comment').textContent=`→ ${item.comment}`;breakdown.appendChild(row);});renderBullets('problemsList',data.problems);renderBullets('fixesList',data.fixes);const share=data.shareLine;document.getElementById('shareX').href=`https://twitter.com/intent/tweet?text=${encodeURIComponent(share)}`;document.getElementById('copyButton').onclick=async()=>{await navigator.clipboard.writeText(share);const s=document.getElementById('copyStatus');s.style.display='block';setTimeout(()=>s.style.display='none',2200)};loadingScreen.style.display='none';resultScreen.classList.add('active');}
 
 const validUrl = normalizeUrl(submittedUrl);
-if (!validUrl) {
-  renderEmptyState();
-} else {
-  const delay = 2000 + Math.floor(Math.random() * 2000);
-  setTimeout(() => renderResult(generateRoastResult(validUrl)), delay);
-}
+if(!validUrl){document.getElementById('keyError').style.display='block';document.getElementById('keyError').textContent='No valid URL provided. Go back and submit a valid URL.';}
+
+document.getElementById('keyForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(!validUrl)return;
+  const key=document.getElementById('apiKey').value.trim();
+  const err=document.getElementById('keyError');
+  err.style.display='none';
+  keyScreen.style.display='none';
+  loadingScreen.style.display='grid';
+  try{const data=await generateRoastWithAI(validUrl,key);renderResult(data,validUrl);}catch(ex){loadingScreen.style.display='none';keyScreen.style.display='grid';err.style.display='block';err.textContent=ex.message;}
+});
 </script>
 </body>
 </html>
